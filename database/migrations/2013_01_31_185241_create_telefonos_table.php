@@ -14,8 +14,8 @@ class CreateTelefonosTable extends Migration
     public function up()
     {
         Schema::create('telefonos', function (Blueprint $table) {
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
+            $table->charset = 'latin1';
+            $table->collation = 'latin1_bin';
             $table->increments('idTelefono');
             $table->integer('persona_id');
             $table->integer('numeroTelefono');
