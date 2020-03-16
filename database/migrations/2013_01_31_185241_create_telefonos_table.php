@@ -15,7 +15,7 @@ class CreateTelefonosTable extends Migration
     {
         Schema::create('telefonos', function (Blueprint $table) {
             $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
+            $table->collation = 'utf8mb4_general_ci';
             $table->increments('idTelefono');
             $table->integer('persona_id');
             $table->integer('numeroTelefono');

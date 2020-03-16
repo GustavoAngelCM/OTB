@@ -15,7 +15,7 @@ class CreateFailedJobsTable extends Migration
     {
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
+            $table->collation = 'utf8mb4_general_ci';
             $table->increments('id');
             $table->text('connection');
             $table->text('queue');
