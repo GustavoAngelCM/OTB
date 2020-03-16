@@ -14,6 +14,7 @@ class CreateMedidorsTable extends Migration
     public function up()
     {
         Schema::create('medidors', function (Blueprint $table) {
+            $table->engine = "InnoDB";
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idMedidor');
