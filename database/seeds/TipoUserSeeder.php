@@ -16,16 +16,16 @@ class TipoUserSeeder extends Seeder
         DB::table('tipo_usuarios')->insert([
             [
                 'idTipoUsuario' => 1,
-                'nombreTipoUsuario' => 'ADMINISTRADOR',
+                'nombreTipoUsuario' => 'ADMINISTRADOR'
             ],
             [
                 'idTipoUsuario' => 2,
-                'nombreTipoUsuario' => 'SOCIO',
+                'nombreTipoUsuario' => 'SOCIO'
             ],
             [
                 'idTipoUsuario' => 3,
-                'nombreTipoUsuario' => 'DIRECTIVO',
-            ],
+                'nombreTipoUsuario' => 'DIRECTIVO'
+            ]
         ]);
     }
 }
