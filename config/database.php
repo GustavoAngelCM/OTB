@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 
 $DATABASE_URL = parse_url('mysql://bfdb1e4908fad6:50b13154@us-cdbr-iron-east-04.cleardb.net/heroku_0aae9d96817b5c4?reconnect=true');
-
+echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 return [
 
     /*
