@@ -12,7 +12,6 @@ class TipoUserSeeder extends Seeder
      */
     public function run()
     {
-        //
         DB::table('tipo_usuarios')->insert([
             [
                 'idTipoUsuario' => 1,

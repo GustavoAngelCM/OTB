@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idUsuario');
             $table->integer('tipoUsuario_id')->unsigned();
-            $table->integer('persona_id')->unsigned();
+            $table->integer('persona_id')->unsigned()->nullable();
             $table->string('name', 20)->unique();
             $table->string('email', 35)->unique();
             $table->timestamp('email_verified_at')->nullable();
