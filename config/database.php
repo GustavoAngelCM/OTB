@@ -46,7 +46,7 @@ return [
         ],
 
         'mysql' => [
-            'driver' => 'mysql',
+            'driver' => $DATABASE_URL['scheme'],
             'url' => env('DATABASE_URL'),
             'host' => $DATABASE_URL['host'],
             'port' => $DATABASE_URL['port'],
