@@ -14,7 +14,31 @@ class CreateHistorialProFondosTable extends Migration
     public function up()
     {
         Schema::create('historial_pro_fondos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->engine = "InnoDB";
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_general_ci';
+            $table->increments('idHistorialProFondo');
+            $table->integer('usuario_id')->unsigned();
+            $table->integer('profondo_id')->unsigned();
+            $table->integer('cancelacion_id')->unsigned();
+            $table->float('montoCancelacion', 8, 2)->unsigned();
+            $table->dateTime('fechaHistorialProFondo')->default(now());
+            $table->enum('estado', [
+                'NORMAL',
+                'CANCELLED',
+            ])->default('NORMAL');
+            $table->foreign('usuario_id')
+                ->references('idUsuario')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->foreign('profondo_id')
+                ->references('idProfondo')
+                ->on('profondos')
+                ->onDelete('cascade');
+            $table->foreign('cancelacion_id')
+                ->references('idCancelacion')
+                ->on('cancelacions')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

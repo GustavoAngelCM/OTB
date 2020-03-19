@@ -14,7 +14,31 @@ class CreateHistorialCancelacionsTable extends Migration
     public function up()
     {
         Schema::create('historial_cancelacions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->engine = "InnoDB";
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_general_ci';
+            $table->increments('idHistorialCancelaciones');
+            $table->integer('lectura_id')->unsigned();
+            $table->integer('cancelacion_id')->nullable()->unsigned();
+            $table->integer('diferenciaMedida')->unsigned();
+            $table->float('precioUnidad', 4, 2)->unsigned();
+            $table->float('subTotal', 8, 2)->unsigned();
+            $table->float('montoCancelado', 8, 2)->unsigned()->default(0.00);
+            $table->dateTime('fechaHoraHCancelacion')->default(now());
+            $table->enum('estadoMedicion', [
+                'PENDING',
+                'IN_PROCESS',
+                'COMPLETED',
+                'CANCELLED',
+            ])->default('PENDING');
+            $table->foreign('lectura_id')
+                ->references('idLectura')
+                ->on('lecturas')
+                ->onDelete('cascade');
+            $table->foreign('cancelacion_id')
+                ->references('idCancelacion')
+                ->on('cancelacions')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

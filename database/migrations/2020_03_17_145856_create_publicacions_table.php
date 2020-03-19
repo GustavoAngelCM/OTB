@@ -14,7 +14,19 @@ class CreatePublicacionsTable extends Migration
     public function up()
     {
         Schema::create('publicacions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->engine = "InnoDB";
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_general_ci';
+            $table->increments('idPublicacion');
+            $table->integer('usuario_id')->unsigned();
+            $table->string('titulo', 80);
+            $table->string('contenido', 500);
+            $table->string('rutaImagen', 120);
+            $table->dateTime('fechaPublicacion')->default(now());
+            $table->foreign('usuario_id')
+                ->references('idUsuario')
+                ->on('users')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ class CreateTelefonosTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idTelefono');
-            $table->integer('persona_id');
+            $table->integer('persona_id')->unsigned();
             $table->integer('numeroTelefono');
             $table->foreign('persona_id')
                 ->references('idPersona')

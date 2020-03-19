@@ -18,14 +18,15 @@ class CreateLecturasTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idLectura');
-            $table->integer('medidor_id');
-            $table->integer('usuario_id');
-            $table->integer('medida');
-            $table->dateTime('fechaMedicion');
+            $table->integer('medidor_id')->unsigned();
+            $table->integer('usuario_id')->unsigned();
+            $table->integer('medida')->unsigned();
+            $table->dateTime('fechaMedicion')->default(now());
             $table->enum('estado',[
                 'INITIAL',
                 'NORMAL',
-            ]);
+                'EDITED',
+            ])->default('INITIAL');
             $table->foreign('medidor_id')
                 ->references('idMedidor')
                 ->on('medidors')

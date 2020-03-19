@@ -14,7 +14,26 @@ class CreateHistorialTransferenciasTable extends Migration
     public function up()
     {
         Schema::create('historial_transferencias', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->engine = "InnoDB";
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_general_ci';
+            $table->increments('idHistorialTransferencias');
+            $table->integer('usuario_anterior_id')->unsigned();
+            $table->integer('usuario_siguiente_id')->unsigned();
+            $table->integer('cancelacion_id')->unsigned();
+            $table->dateTime('fechaHoraTransaferencia')->default(now());
+            $table->foreign('usuario_anterior_id')
+                ->references('idUsuario')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->foreign('usuario_siguiente_id')
+                ->references('idUsuario')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->foreign('cancelacion_id')
+                ->references('idCancelacion')
+                ->on('cancelacions')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
