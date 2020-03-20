@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 Route::group(
     [
@@ -23,14 +23,23 @@ Route::group(
         'prefix' => 'V1'
     ],
     function (){
+        // JWT AUTH
         Route::post('/auth/login', 'TokensController@login');
+        Route::post('/auth/refresh', 'TokensController@refreshToken');
+        Route::get('/auth/logout', 'TokensController@logout');
     }
 );
 
+Route::group(
+    [
+        'middleware' => ['jwt.auth'],
+        'prefix' => 'V1'
+    ],
+    function (){
+        Route::get('/tipo', 'TipoController@list');
+        Route::post('/tipo', 'TipoController@create');
 
-
-Route::get('/tipo', 'TipoController@list');
-Route::post('/tipo', 'TipoController@create');
-
-Route::get('/user', 'UserController@list');
-Route::post('/user', 'UserController@create');
+        Route::get('/user', 'UserController@list');
+        Route::post('/user', 'UserController@create');
+    }
+);

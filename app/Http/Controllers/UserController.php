@@ -6,6 +6,7 @@ use App\Medidor;
 use App\Persona;
 use App\Telefono;
 use App\User;
+use App\Lecturas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -59,13 +60,15 @@ class UserController extends Controller
                         'direccion' => $valor['direccion'],
                         'fechaInstalacion' => $valor['fechaInstalacion'],
                         'estado' => $valor['estado'],
+                        'medida' => $valor['lectura'],
                     ],
                     [
                         'ordenMedidor' => 'bail|required|unique:medidors',
                         'numeroMedidor' => 'bail|required|numeric|unique:medidors',
                         'direccion' => 'bail|required|max:150',
                         'fechaInstalacion' => 'bail|required|date',
-                        'estado' => 'bail|nullable|boolean'
+                        'estado' => 'bail|nullable|boolean',
+                        'medida' => 'bail|required|numeric',
                     ]
                 );
                 if ($validator->fails()) {
@@ -122,7 +125,7 @@ class UserController extends Controller
                     $usuarioRequest = new User();
                     $usuarioRequest->tipoUsuario_id = $request->input('tipo');
                     $usuarioRequest->persona_id = $personGET->idPersona;
-                    $usuarioRequest->name = strtolower("{$personaRequest->pNombre[0]}{$personaRequest->pNombre[1]}{$personaRequest->pNombre[2]}{$personaRequest->apellidoM}");
+                    $usuarioRequest->name = strtolower("{$personaRequest->pNombre[0]}{$personaRequest->pNombre[1]}{$personaRequest->pNombre[2]}{$personaRequest->ci[0]}{$personaRequest->ci[1]}{$personaRequest->ci[2]}{$personaRequest->apellidoP}");
                     $usuarioRequest->email = $request->input('email');
                     $usuarioRequest->password = Hash::make($personaRequest->ci);
                     $usuarioRequest->icoType = $request->input('ico');
@@ -139,6 +142,14 @@ class UserController extends Controller
                         $medidoresRequest->fechaInstalacion = $valor['fechaInstalacion'];
                         $medidoresRequest->estado = ($valor['estado'] == null) ? true : $valor['estado'];
                         $medidoresRequest->save();
+
+                        $medidorGET = Medidor::where('numeroMedidor', '=', $valor['numero'])->first();
+
+                        $lecturaRequest = new Lecturas();
+                        $lecturaRequest->medidor_id = $medidorGET->idMedidor;
+                        $lecturaRequest->usuario_id = $userGET->idUsuario;
+                        $lecturaRequest->medida = $valor['lectura'];
+                        $lecturaRequest->save();
                     }
 
                     return response()->json([

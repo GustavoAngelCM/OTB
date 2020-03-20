@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TokensController extends Controller
@@ -12,7 +15,6 @@ class TokensController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('user', 'pass');
-
         $validator = Validator::make(
             $credentials,
             [
@@ -20,7 +22,6 @@ class TokensController extends Controller
                 'pass' => 'required',
             ]
         );
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -32,14 +33,12 @@ class TokensController extends Controller
                 'name' => $credentials['user'],
                 'password' => $credentials['pass'],
             ];
-
             $token = JWTAuth::attempt($credentials);
-
             if ($token) {
                 return response()->json([
                     'success' => true,
                     'token' => $token,
-                    'user' => User::where('name', $credentials['name'])->get()->first()
+                    'user' => User::where('name', $credentials['name'])->orWhere('email', $credentials['name'])->get()->first()
                 ],200);
             } else {
                 return response()->json([
@@ -50,4 +49,52 @@ class TokensController extends Controller
             }
         }
     }
+
+    public function refreshToken()
+    {
+        $token = JWTAuth::getToken();
+        try
+        {
+            $token = JWTAuth::refresh($token);
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+            ],200);
+        }
+        catch (TokenExpiredException $ex)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token ya expirado.',
+            ], 422);
+        }
+        catch (TokenBlacklistedException $ex)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo refrescar el token.',
+            ], 422);
+        }
+    }
+
+    public function logout()
+    {
+        $token = JWTAuth::getToken();
+        try
+        {
+            JWTAuth::invalidate($token);
+            return response()->json([
+                'success' => true,
+                'message' => 'Sesión finalizada correctamente.',
+            ],200);
+        }
+        catch (JWTException $e)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo finalizar la sesión.',
+            ], 422);
+        }
+    }
+
 }

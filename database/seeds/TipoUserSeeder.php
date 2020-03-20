@@ -15,15 +15,21 @@ class TipoUserSeeder extends Seeder
         DB::table('tipo_usuarios')->insert([
             [
                 'idTipoUsuario' => 1,
-                'nombreTipoUsuario' => 'ADMINISTRADOR'
+                'nombreTipoUsuario' => 'ADMINISTRADOR',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'idTipoUsuario' => 2,
-                'nombreTipoUsuario' => 'SOCIO'
+                'nombreTipoUsuario' => 'SOCIO',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'idTipoUsuario' => 3,
-                'nombreTipoUsuario' => 'DIRECTIVO'
+                'nombreTipoUsuario' => 'DIRECTIVO',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
     }

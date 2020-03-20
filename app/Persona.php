@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Persona extends Model
 {
-    //
     protected  $primaryKey = 'idPersona';
 
     public function seterNames($names)

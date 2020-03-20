@@ -22,6 +22,8 @@ class ConfiguracionCancelacionSeeder extends Seeder
                 'cantidadMesesParaMulta' => 3,
                 'fechaActualizacion' => now(),
                 'activo' =>  true,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
     }

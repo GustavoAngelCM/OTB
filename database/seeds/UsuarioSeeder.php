@@ -22,6 +22,8 @@ class UsuarioSeeder extends Seeder
                 'email' => 'adminotb@gmail.com',
                 'password' => Hash::make('adminOTB#21'),
                 'icoType' => 'Varon_1',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
     }

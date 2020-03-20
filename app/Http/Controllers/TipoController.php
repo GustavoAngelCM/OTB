@@ -11,7 +11,7 @@ class TipoController extends Controller
 
     public function list()
     {
-        return TipoUsuario::where('nombreTipoUsuario', '!=', 'ADMINISTRADOR')->get();
+        return TipoUsuario::select('idTipoUsuario', 'nombreTipoUsuario')->where('nombreTipoUsuario', '!=', 'ADMINISTRADOR')->get();
     }
 
     public function create(Request $request)
