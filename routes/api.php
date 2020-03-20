@@ -32,6 +32,16 @@ Route::group(
 
 Route::group(
     [
+        'middleware' => [],
+        'prefix' => 'NOT-SECURE'
+    ],
+    function (){
+        Route::get('/tipo', 'TipoController@list');
+    }
+);
+
+Route::group(
+    [
         'middleware' => ['jwt.auth'],
         'prefix' => 'V1'
     ],
