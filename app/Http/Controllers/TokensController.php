@@ -77,6 +77,13 @@ class TokensController extends Controller
         }
     }
 
+    public function recapture()
+    {
+        return response()->json([
+            'message' => 'estoy vivo',
+        ], 200);
+    }
+
     public function logout()
     {
         $token = JWTAuth::getToken();
