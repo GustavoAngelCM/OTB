@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
@@ -82,6 +83,14 @@ class TokensController extends Controller
                 'message' => 'No se pudo refrescar el token.',
             ], 422);
         }
+    }
+
+    public function verifyValidateToken()
+    {
+        return response()->json([
+            'success' => true,
+            'token' => JWTAuth::getToken()
+        ], 200);
     }
 
     public function logout()

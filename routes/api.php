@@ -25,8 +25,7 @@ Route::group(
     function (){
         // JWT AUTH
         Route::post('/auth/login', 'TokensController@login');
-        Route::post('/auth/refresh', 'TokensController@refresh');
-        Route::post('/auth/logout', 'TokensController@logout');
+
     }
 );
 
@@ -54,5 +53,10 @@ Route::group(
 
         //lecturas
         Route::get('/reading', 'LecturaController@getPreviousReading');
+        // auth
+        Route::post('/auth/refresh', 'TokensController@refresh');
+        Route::post('/auth/verify', 'TokensController@verifyValidateToken');
+        Route::post('/auth/logout', 'TokensController@logout');
+        //***
     }
 );
