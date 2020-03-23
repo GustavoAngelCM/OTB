@@ -53,31 +53,35 @@ class TokensController extends Controller
     public function refresh()
     {
         $token = JWTAuth::getToken();
-        return response()->json([
-            'r' => $token
-        ], 200);
-//        try
-//        {
-//            $token = JWTAuth::refresh($token);
-//            return response()->json([
-//                'success' => true,
-//                'token' => $token,
-//            ],200);
-//        }
-//        catch (TokenExpiredException $ex)
-//        {
-//            return response()->json([
-//                'success' => false,
-//                'message' => 'Token ya expirado.',
-//            ], 422);
-//        }
-//        catch (TokenBlacklistedException $ex)
-//        {
-//            return response()->json([
-//                'success' => false,
-//                'message' => 'No se pudo refrescar el token.',
-//            ], 422);
-//        }
+        try
+        {
+            $token = JWTAuth::refresh($token);
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+            ],200);
+        }
+        catch (JWTException $ex)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener token.',
+            ], 422);
+        }
+        catch (TokenExpiredException $ex)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token ya expirado.',
+            ], 422);
+        }
+        catch (TokenBlacklistedException $ex)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo refrescar el token.',
+            ], 422);
+        }
     }
 
     public function logout()
