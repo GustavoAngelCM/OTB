@@ -50,7 +50,7 @@ class TokensController extends Controller
         }
     }
 
-    public function refreshToken()
+    public function refresh()
     {
         $token = JWTAuth::getToken();
         try

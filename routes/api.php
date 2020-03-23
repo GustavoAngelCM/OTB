@@ -25,8 +25,8 @@ Route::group(
     function (){
         // JWT AUTH
         Route::post('/auth/login', 'TokensController@login');
-        Route::get('/auth/refresh', 'TokensController@refreshToken');
-        Route::get('/auth/logout', 'TokensController@logout');
+        Route::post('/auth/refresh', 'TokensController@refresh');
+        Route::post('/auth/logout', 'TokensController@logout');
     }
 );
 
