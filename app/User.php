@@ -61,4 +61,19 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function tipo()
+    {
+        return $this->hasOne('App\TipoUsuario',  'idTipoUsuario', 'tipoUsuario_id');
+    }
+
+    public function person()
+    {
+        return $this->hasOne('App\Persona',  'idPersona', 'persona_id');
+    }
+
+    public function gauges()
+    {
+        return $this->hasMany('App\Medidor', 'usuario_id', 'idUsuario');
+    }
+
 }

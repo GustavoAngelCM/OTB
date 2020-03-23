@@ -51,5 +51,8 @@ Route::group(
 
         Route::get('/user', 'UserController@list');
         Route::post('/user', 'UserController@create');
+
+        //lecturas
+        Route::get('/reading', 'LecturaController@getPreviousReading');
     }
 );

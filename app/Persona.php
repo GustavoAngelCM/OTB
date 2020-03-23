@@ -65,4 +65,9 @@ class Persona extends Model
         }
     }
 
+    public function user()
+    {
+        return $this->hasOne('App\User', 'persona_id', 'idPersona');
+    }
+
 }
