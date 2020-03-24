@@ -23,7 +23,7 @@ class CreateHistorialProFondosTable extends Migration
             $table->integer('cancelacion_id')->nullable()->unsigned()->default(null);
             $table->float('montoCancelacion', 8, 2)->unsigned()->default(0.00);
             $table->dateTime('fechaHistorialProFondo')->default(now());
-            $table->enum('estadoProfondo', [
+            $table->enum('state', [
                 'PENDING',
                 'IN_PROCESS',
                 'COMPLETED',
