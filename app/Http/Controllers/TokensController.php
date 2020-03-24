@@ -39,7 +39,11 @@ class TokensController extends Controller
                 return response()->json([
                     'success' => true,
                     'token' => $token,
-                    'user' => User::where('name', $credentials['name'])->orWhere('email', $credentials['name'])->get()->first()
+                    'user' => User::select('idUsuario', 'tipoUsuario_id', 'persona_id', 'name', 'email', 'icoType')
+                        ->where('name', $credentials['name'])
+                        ->orWhere('email', $credentials['name'])
+                        ->get()
+                        ->first()
                 ],200);
             } else {
                 return response()->json([
@@ -89,7 +93,8 @@ class TokensController extends Controller
     {
         return response()->json([
             'success' => true,
-            'token' => JWTAuth::getToken()
+            'token' => JWTAuth::getToken(),
+            'user' => Auth::user(),
         ], 200);
     }
 
