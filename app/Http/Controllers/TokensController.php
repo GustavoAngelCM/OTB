@@ -94,7 +94,7 @@ class TokensController extends Controller
         return response()->json([
             'success' => true,
             'token' => JWTAuth::getToken(),
-            'user' => Auth::user(),
+            'user' => Auth::user()->select('idUsuario', 'tipoUsuario_id', 'persona_id', 'name', 'email', 'icoType'),
         ], 200);
     }
 
