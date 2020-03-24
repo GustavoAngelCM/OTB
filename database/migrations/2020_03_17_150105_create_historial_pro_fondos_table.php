@@ -28,7 +28,7 @@ class CreateHistorialProFondosTable extends Migration
                 'IN_PROCESS',
                 'COMPLETED',
                 'CANCELLED',
-            ])->default('NORMAL');
+            ])->default('PENDING');
             $table->foreign('usuario_id')
                 ->references('idUsuario')
                 ->on('users')
