@@ -20,11 +20,13 @@ class CreateHistorialProFondosTable extends Migration
             $table->increments('idHistorialProFondo');
             $table->integer('usuario_id')->unsigned();
             $table->integer('profondo_id')->unsigned();
-            $table->integer('cancelacion_id')->unsigned();
-            $table->float('montoCancelacion', 8, 2)->unsigned();
+            $table->integer('cancelacion_id')->nullable()->unsigned()->default(null);
+            $table->float('montoCancelacion', 8, 2)->unsigned()->default(0.00);
             $table->dateTime('fechaHistorialProFondo')->default(now());
-            $table->enum('estado', [
-                'NORMAL',
+            $table->enum('estadoProfondo', [
+                'PENDING',
+                'IN_PROCESS',
+                'COMPLETED',
                 'CANCELLED',
             ])->default('NORMAL');
             $table->foreign('usuario_id')

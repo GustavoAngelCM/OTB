@@ -34,8 +34,8 @@ class LecturaController extends Controller
                                 'fechaMedicion',
                                 'estado'
                             )
-                            ->whereYear('fechaMedicion', date('Y'))
-                            ->whereMonth('fechaMedicion', date('m'))
+//                            ->whereYear('fechaMedicion', date('Y'))
+//                            ->whereMonth('fechaMedicion', date('m'))
                             ->orderByDesc('fechaMedicion')
                             ->first()
                     ];

@@ -25,6 +25,7 @@ class CreateMedidorsTable extends Migration
             $table->date('fechaInstalacion');
             $table->enum('estado',[
                 'ACTIVO',
+                'PASIVO',
                 'INACTIVO',
             ]);
             $table->foreign('usuario_id')

@@ -18,10 +18,16 @@ class CreateHistorialTransferenciasTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idHistorialTransferencias');
-            $table->integer('usuario_anterior_id')->unsigned();
+            $table->integer('usuario_anterior_id')->nullable()->unsigned()->default(null);
             $table->integer('usuario_siguiente_id')->unsigned();
-            $table->integer('cancelacion_id')->unsigned();
+            $table->integer('cancelacion_id')->nullable()->unsigned()->default(null);
             $table->dateTime('fechaHoraTransaferencia')->default(now());
+            $table->enum('estadoTransferencia', [
+                'PENDING',
+                'IN_PROCESS',
+                'COMPLETED',
+                'CANCELLED',
+            ])->default('PENDING');
             $table->foreign('usuario_anterior_id')
                 ->references('idUsuario')
                 ->on('users')
