@@ -22,12 +22,19 @@ class CreateCancelacionsTable extends Migration
             $table->dateTime('fechaCancelacion')->default(now());
             $table->string('keyCancelacion', 15);
             $table->boolean('descartado')->default(false);
-            $table->enum('tipoCancelacion',[
+            $table->enum('moneda',[
                 'BOLIVIANOS',
                 'DOLARES',
+                'EUROS',
+                'OTRO',
+            ])->default('BOLIVIANOS');
+            $table->enum('tipoCancelacion',[
+                'EFECTIVO',
                 'DEPOSITO',
                 'CHEQUE',
-            ])->default('BOLIVIANOS');
+                'WEB',
+                'OTRO',
+            ])->default('EFECTIVO');
             $table->timestamps();
         });
     }

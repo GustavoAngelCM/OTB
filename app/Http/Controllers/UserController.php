@@ -64,7 +64,7 @@ class UserController extends Controller
                     ],
                     [
                         'ordenMedidor' => 'bail|required|unique:medidors',
-                        'numeroMedidor' => 'bail|required|numeric|unique:medidors',
+                        'numeroMedidor' => 'bail|required|unique:medidors',
                         'direccion' => 'bail|required|max:150',
                         'fechaInstalacion' => 'bail|required|date',
                         'estado' => 'bail|nullable|boolean',

@@ -20,7 +20,7 @@ class CreateMedidorsTable extends Migration
             $table->increments('idMedidor');
             $table->integer('usuario_id')->unsigned();
             $table->string('ordenMedidor', 50);
-            $table->integer('numeroMedidor')->unique();
+            $table->string('numeroMedidor', 50)->unique();
             $table->string('direccion', 70);
             $table->date('fechaInstalacion');
             $table->enum('estado',[
