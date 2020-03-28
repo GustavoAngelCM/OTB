@@ -21,9 +21,9 @@ class CreateHistorialCancelacionsTable extends Migration
             $table->integer('lectura_id')->unsigned();
             $table->integer('cancelacion_id')->nullable()->unsigned();
             $table->integer('diferenciaMedida')->unsigned();
-            $table->float('precioUnidad', 4, 2)->unsigned();
-            $table->float('subTotal', 8, 2)->unsigned()->default(0.00);
-            $table->float('montoCancelado', 8, 2)->unsigned()->default(0.00);
+            $table->float('precioUnidad', 8, 2)->unsigned();
+            $table->float('subTotal', 10, 2)->unsigned()->default(0.00);
+            $table->float('montoCancelado', 10, 2)->unsigned()->default(0.00);
             $table->dateTime('fechaHoraHCancelacion')->default(now());
             $table->enum('estadoMedicion', [
                 'PENDING',

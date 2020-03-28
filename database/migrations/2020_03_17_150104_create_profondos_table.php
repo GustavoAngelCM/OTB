@@ -20,7 +20,7 @@ class CreateProfondosTable extends Migration
             $table->increments('idProfondo');
             $table->string('nombreProfondo', 50);
             $table->string('descripcionProfondo', 300)->nullable();
-            $table->float('montoEstablecido', 8,2)->unsigned();
+            $table->float('montoEstablecido', 10,2)->unsigned();
             $table->enum('estado', [
                 'PENDING',
                 'IN_PROCESS',

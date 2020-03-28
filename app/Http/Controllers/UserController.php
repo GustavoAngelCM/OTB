@@ -7,6 +7,9 @@ use App\Persona;
 use App\Telefono;
 use App\User;
 use App\Lecturas;
+use App\Cancelacion;
+use App\HistorialTransferencia;
+use Webpatser\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +19,7 @@ class UserController extends Controller
     //create
     public function create(Request $request)
     {
+        $transaction_keys = array();
         $validator = Validator::make(
             [
                 'idTipoUsuario' => $request->input('tipo'),
@@ -53,6 +57,8 @@ class UserController extends Controller
             $validator = null;
             $error = false;
             foreach ($request->input('medidores') as $clave => $valor) {
+                $key = Uuid::generate()->string;
+                array_push($transaction_keys, $key);
                 $validator = Validator::make(
                     [
                         'ordenMedidor' => $valor['orden'],
@@ -61,6 +67,7 @@ class UserController extends Controller
                         'fechaInstalacion' => $valor['fechaInstalacion'],
                         'estado' => $valor['estado'],
                         'medida' => $valor['lectura'],
+                        'compra' => $valor['compra'],
                     ],
                     [
                         'ordenMedidor' => 'bail|required|unique:medidors',
@@ -69,11 +76,34 @@ class UserController extends Controller
                         'fechaInstalacion' => 'bail|required|date',
                         'estado' => 'bail|nullable|boolean',
                         'medida' => 'bail|required|numeric',
+                        'compra' => 'required',
                     ]
                 );
                 if ($validator->fails()) {
                     $error = true;
                     break;
+                } else {
+                    $validator = null;
+                    $error = false;
+
+                    $validator = Validator::make(
+                        [
+                            'montoCancelacion' => $valor['compra']['precio'],
+                            'moneda' => $valor['compra']['moneda'],
+                            'tipoCancelacion' => $valor['compra']['tipo'],
+                            'keyCancelacion' => $key,
+                        ],
+                        [
+                            'montoCancelacion' => 'bail|required|numeric',
+                            'moneda' => 'bail|required',
+                            'tipoCancelacion' => 'bail|required',
+                            'keyCancelacion' => 'bail|required|unique:cancelacions'
+                        ]
+                    );
+                    if ($validator->fails()) {
+                        $error = true;
+                        break;
+                    }
                 }
             }
             if ($error == true) {
@@ -104,7 +134,7 @@ class UserController extends Controller
                         'errors' => $validator->errors()->messages(),
                     ], 400);
                 } else {
-
+//                    dd(Uuid::generate()->string);
                     $personaRequest = new Persona();
                     $personaRequest->seterNames($request->input('nombres'));
                     $personaRequest->seterLastNames($request->input('apellidos'));
@@ -133,6 +163,7 @@ class UserController extends Controller
 
                     $userGET = User::where('persona_id', '=', $personGET->idPersona)->first();
 
+                    $c_key = 0;
                     foreach ($request->input('medidores') as $clave => $valor) {
                         $medidoresRequest =  new Medidor();
                         $medidoresRequest->usuario_id = $userGET->idUsuario;
@@ -150,6 +181,25 @@ class UserController extends Controller
                         $lecturaRequest->usuario_id = $userGET->idUsuario;
                         $lecturaRequest->medida = $valor['lectura'];
                         $lecturaRequest->save();
+
+                        $cancelacionRequest = new Cancelacion();
+                        $cancelacionRequest->montoCancelacion = $valor['compra']['precio'];
+                        $cancelacionRequest->keyCancelacion = $transaction_keys[$c_key];
+                        $cancelacionRequest->moneda = strtoupper($valor['compra']['moneda']);
+                        $cancelacionRequest->tipoCancelacion = strtoupper($valor['compra']['tipo']);
+                        $cancelacionRequest->save();
+
+                        $cancelacion_GET = Cancelacion::where('keyCancelacion', $transaction_keys[$c_key])->get()->first();
+
+                        $transferenciaRequest = new HistorialTransferencia();
+                        $transferenciaRequest->usuario_anterior_id = null;
+                        $transferenciaRequest->usuario_siguiente_id = $userGET->idUsuario;
+                        $transferenciaRequest->cancelacion_id = $cancelacion_GET->idCancelacion;
+                        $transferenciaRequest->montoTotalTransferencia = (isset($valor['compra']['saldo'])) ? $valor['compra']['saldo'] + $valor['compra']['precio'] : $valor['compra']['precio'];
+                        $transferenciaRequest->montoCancelado = $valor['compra']['precio'];
+                        $transferenciaRequest->estadoTransferencia = (isset($valor['compra']['saldo'])) ? 'IN_PROCESS' : 'COMPLETED';
+                        $transferenciaRequest->save();
+                        $c_key ++;
                     }
 
                     return response()->json([
@@ -159,7 +209,6 @@ class UserController extends Controller
                     ], 201);
                 }
             }
-//            $validator = null;
         }
     }
 }
