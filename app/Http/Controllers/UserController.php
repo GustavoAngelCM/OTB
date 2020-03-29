@@ -40,7 +40,7 @@ class UserController extends Controller
                 'ci' => 'bail|required|max:15|unique:personas',
                 'fechaNacimiento' => 'bail|required|date',
                 'sexo' => 'bail|required|max:1',
-                'email' => 'bail|required|email|max:35|unique:users',
+                'email' => 'bail|required|email|max:50|unique:users',
                 'ico' => 'required',
                 'medidores' => 'required',
                 'telefonos' => 'required'
