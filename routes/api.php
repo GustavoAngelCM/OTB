@@ -53,6 +53,7 @@ Route::group(
 
         //lecturas
         Route::get('/reading', 'LecturaController@getPreviousReading');
+        Route::post('/reading', 'LecturaController@setCurrentReadings');
         // auth
         Route::post('/auth/refresh', 'TokensController@refresh');
         Route::post('/auth/verify', 'TokensController@verifyValidateToken');

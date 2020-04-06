@@ -9,6 +9,8 @@ use App\User;
 use App\Lecturas;
 use App\Cancelacion;
 use App\HistorialTransferencia;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -176,10 +178,13 @@ class UserController extends Controller
 
                         $medidorGET = Medidor::where('numeroMedidor', '=', $valor['numero'])->first();
 
+                        $user_auth = Auth::user();
+
                         $lecturaRequest = new Lecturas();
                         $lecturaRequest->medidor_id = $medidorGET->idMedidor;
-                        $lecturaRequest->usuario_id = $userGET->idUsuario;
+                        $lecturaRequest->usuario_id = $user_auth->idUsuario;
                         $lecturaRequest->medida = $valor['lectura'];
+                        $lecturaRequest->fechaMedicion = Carbon::parse('2020-02-02');//parseando una fecha medicion ficticia pero de origen de lecturas
                         $lecturaRequest->save();
 
                         $cancelacionRequest = new Cancelacion();
