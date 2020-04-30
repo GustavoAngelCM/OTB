@@ -20,7 +20,7 @@ class CancellationController extends Controller
         $user = Auth::user();
         if ($user->tipoUsuario_id == 1)
         {
-            $changeCoin = Http::get('https://jsonplaceholder.typicode.com/users');
+            $changeCoin = Http::get('https://api.cambio.today/v1/full/BOB/json?key=4234|S^9b_2vNDkPjc~eR1Dr^4q3Y2fZfJxAA');
             $key = Uuid::generate()->string;
             $validator = Validator::make(
                 [
