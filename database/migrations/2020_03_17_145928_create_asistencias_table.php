@@ -18,13 +18,13 @@ class CreateAsistenciasTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idAsistencia');
-            $table->integer('usuario_id')->unsigned();
+            $table->integer('medidor_id')->unsigned();
             $table->integer('evento_id')->unsigned();
             $table->boolean('asistio');
             $table->dateTime('fechaHoraAsistencia')->default(now())->nullable();
-            $table->foreign('usuario_id')
-                ->references('idUsuario')
-                ->on('users')
+            $table->foreign('medidor_id')
+                ->references('idMedidor')
+                ->on('medidors')
                 ->onDelete('cascade');
             $table->foreign('evento_id')
                 ->references('idEvento')

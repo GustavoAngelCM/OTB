@@ -20,6 +20,7 @@ class CreateHistorialTransferenciasTable extends Migration
             $table->increments('idHistorialTransferencias');
             $table->integer('usuario_anterior_id')->nullable()->unsigned()->default(null);
             $table->integer('usuario_siguiente_id')->unsigned();
+            $table->integer('medidor_involucrado_id')->unsigned();
             $table->integer('cancelacion_id')->nullable()->unsigned()->default(null);
             $table->float('montoTotalTransferencia', 10, 2)->unsigned()->default(0.00);
             $table->float('montoCancelado', 10, 2)->unsigned()->default(0.00);
@@ -37,6 +38,10 @@ class CreateHistorialTransferenciasTable extends Migration
             $table->foreign('usuario_siguiente_id')
                 ->references('idUsuario')
                 ->on('users')
+                ->onDelete('cascade');
+            $table->foreign('medidor_involucrado_id')
+                ->references('idMedidor')
+                ->on('medidors')
                 ->onDelete('cascade');
             $table->foreign('cancelacion_id')
                 ->references('idCancelacion')

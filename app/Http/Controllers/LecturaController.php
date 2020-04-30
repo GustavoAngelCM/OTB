@@ -224,6 +224,8 @@ class LecturaController extends Controller
                             ->join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
                             ->where('lecturas.medidor_id', '=',  $data_lectura->medidor_id)
                             ->where('historial_cancelacions.estadoMedicion', '=', 'PENDING')
+                                ->where('historial_cancelacions.diferenciaMedida', '!=', 0)
+                            ->where('historial_cancelacions.precioUnidad', '!=', 0)
                             ->where('medidors.estado', '=', 'ACTIVO')
                             ->orderBy('fechaHoraHCancelacion', 'desc')
                             ->get();

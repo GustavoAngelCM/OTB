@@ -18,7 +18,7 @@ class CreateHistorialProFondosTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
             $table->increments('idHistorialProFondo');
-            $table->integer('usuario_id')->unsigned();
+            $table->integer('medidor_id')->unsigned();
             $table->integer('profondo_id')->unsigned();
             $table->integer('cancelacion_id')->nullable()->unsigned()->default(null);
             $table->float('montoCancelacion', 10, 2)->unsigned()->default(0.00);
@@ -29,9 +29,9 @@ class CreateHistorialProFondosTable extends Migration
                 'COMPLETED',
                 'CANCELLED',
             ])->default('PENDING');
-            $table->foreign('usuario_id')
-                ->references('idUsuario')
-                ->on('users')
+            $table->foreign('medidor_id')
+                ->references('idMedidor')
+                ->on('medidors')
                 ->onDelete('cascade');
             $table->foreign('profondo_id')
                 ->references('idProfondo')

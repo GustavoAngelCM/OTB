@@ -13,9 +13,4 @@ class Medidor extends Model
         return $this->hasMany('App\Lecturas', 'medidor_id', 'idMedidor');
     }
 
-    public function readingsPending()
-    {
-        return $this->hasMany('App\Lecturas', 'medidor_id', 'idMedidor');
-    }
-
 }

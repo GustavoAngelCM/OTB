@@ -22,7 +22,9 @@ class CreateConfiguracionCancelacionsTable extends Migration
             $table->float('montoCuboAgua', 8, 2);
             $table->float('montoMultaConsumoAgua', 8, 2);
             $table->float('montoTransferenciaAccion', 10, 2);
+            $table->float('montoMinimoCancelacion', 8, 2);
             $table->integer('cantidadMesesParaMulta');
+            $table->string('descuentoCobroAgua', 300);
             $table->dateTime('fechaActualizacion')->default(now());
             $table->boolean('activo');
             $table->foreign('usuario_id')

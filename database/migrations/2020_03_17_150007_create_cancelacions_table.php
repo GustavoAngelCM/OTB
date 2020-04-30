@@ -22,6 +22,7 @@ class CreateCancelacionsTable extends Migration
             $table->dateTime('fechaCancelacion')->default(now());
             $table->string('keyCancelacion', 50)->unique();
             $table->boolean('descartado')->default(false);
+            $table->boolean('descuento')->default(false);
             $table->enum('moneda',[
                 'BOLIVIANOS',
                 'DOLARES',

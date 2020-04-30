@@ -199,6 +199,7 @@ class UserController extends Controller
                         $transferenciaRequest = new HistorialTransferencia();
                         $transferenciaRequest->usuario_anterior_id = null;
                         $transferenciaRequest->usuario_siguiente_id = $userGET->idUsuario;
+                        $transferenciaRequest->medidor_involucrado_id = $medidorGET->idMedidor;
                         $transferenciaRequest->cancelacion_id = $cancelacion_GET->idCancelacion;
                         $transferenciaRequest->montoTotalTransferencia = (isset($valor['compra']['saldo'])) ? $valor['compra']['saldo'] + $valor['compra']['precio'] : $valor['compra']['precio'];
                         $transferenciaRequest->montoCancelado = $valor['compra']['precio'];

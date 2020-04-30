@@ -31,16 +31,6 @@ Route::group(
 
 Route::group(
     [
-        'middleware' => [],
-        'prefix' => 'NOT-SECURE'
-    ],
-    function (){
-        Route::get('/tipo', 'TipoController@list');
-    }
-);
-
-Route::group(
-    [
         'middleware' => ['jwt.auth'],
         'prefix' => 'V1'
     ],
@@ -48,12 +38,17 @@ Route::group(
         Route::get('/tipo', 'TipoController@list');
         Route::post('/tipo', 'TipoController@create');
 
-        Route::get('/user', 'UserController@list');
+//        Route::get('/user', 'UserController@list');
         Route::post('/user', 'UserController@create');
 
-        //lecturas
+        //readings
         Route::get('/reading', 'LecturaController@getPreviousReading');
         Route::post('/reading', 'LecturaController@setCurrentReadings');
+        //lists partners
+        Route::get('/partners', 'PartnersController@getPartners');
+        Route::get('/partner/{uid}', 'PartnersController@getHistoryCancelled');
+        // cancellation
+        Route::post('/cancellation', 'CancellationController@setCancellations');
         // auth
         Route::post('/auth/refresh', 'TokensController@refresh');
         Route::post('/auth/verify', 'TokensController@verifyValidateToken');
