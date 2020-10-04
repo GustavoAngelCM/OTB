@@ -12,12 +12,12 @@ class PersonasTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('personas')->delete();
-        
+
         \DB::table('personas')->insert(array (
-            0 => 
+            0 =>
             array (
                 'idPersona' => 2,
                 'pNombre' => 'Josue',
@@ -31,7 +31,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:54',
                 'updated_at' => '2020-04-06 11:57:54',
             ),
-            1 => 
+            1 =>
             array (
                 'idPersona' => 12,
                 'pNombre' => 'Gabriel',
@@ -45,7 +45,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:54',
                 'updated_at' => '2020-04-06 11:57:54',
             ),
-            2 => 
+            2 =>
             array (
                 'idPersona' => 22,
                 'pNombre' => 'Juan',
@@ -59,13 +59,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:54',
                 'updated_at' => '2020-04-06 11:57:54',
             ),
-            3 => 
+            3 =>
             array (
                 'idPersona' => 32,
                 'pNombre' => 'Alvina',
                 'sNombre' => NULL,
                 'apellidoP' => 'Benavides',
-                'apellidoM' => ' Teran',
+                'apellidoM' => 'Teran',
                 'ci' => '2914632',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1949-03-02',
@@ -73,7 +73,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:54',
                 'updated_at' => '2020-04-06 11:57:54',
             ),
-            4 => 
+            4 =>
             array (
                 'idPersona' => 42,
                 'pNombre' => 'Ernesto',
@@ -87,7 +87,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:54',
                 'updated_at' => '2020-04-06 11:57:54',
             ),
-            5 => 
+            5 =>
             array (
                 'idPersona' => 52,
                 'pNombre' => 'Julio',
@@ -101,7 +101,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            6 => 
+            6 =>
             array (
                 'idPersona' => 62,
                 'pNombre' => 'Roberto',
@@ -115,7 +115,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            7 => 
+            7 =>
             array (
                 'idPersona' => 72,
                 'pNombre' => 'Eufracio',
@@ -129,7 +129,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            8 => 
+            8 =>
             array (
                 'idPersona' => 82,
                 'pNombre' => 'Marizabeth',
@@ -143,7 +143,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            9 => 
+            9 =>
             array (
                 'idPersona' => 92,
                 'pNombre' => 'Mariano',
@@ -157,7 +157,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            10 => 
+            10 =>
             array (
                 'idPersona' => 102,
                 'pNombre' => 'Salome',
@@ -171,7 +171,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            11 => 
+            11 =>
             array (
                 'idPersona' => 112,
                 'pNombre' => 'Jorge',
@@ -185,7 +185,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:55',
                 'updated_at' => '2020-04-06 11:57:55',
             ),
-            12 => 
+            12 =>
             array (
                 'idPersona' => 122,
                 'pNombre' => 'Victor',
@@ -199,7 +199,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            13 => 
+            13 =>
             array (
                 'idPersona' => 132,
                 'pNombre' => 'Gonzalo',
@@ -213,7 +213,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            14 => 
+            14 =>
             array (
                 'idPersona' => 142,
                 'pNombre' => 'Marilu',
@@ -227,7 +227,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            15 => 
+            15 =>
             array (
                 'idPersona' => 152,
                 'pNombre' => 'Pedro',
@@ -241,7 +241,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            16 => 
+            16 =>
             array (
                 'idPersona' => 162,
                 'pNombre' => 'Lizeth',
@@ -255,7 +255,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            17 => 
+            17 =>
             array (
                 'idPersona' => 172,
                 'pNombre' => 'Carlos',
@@ -269,7 +269,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            18 => 
+            18 =>
             array (
                 'idPersona' => 182,
                 'pNombre' => 'Rodolfo',
@@ -283,7 +283,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            19 => 
+            19 =>
             array (
                 'idPersona' => 192,
                 'pNombre' => 'Vicente',
@@ -297,7 +297,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            20 => 
+            20 =>
             array (
                 'idPersona' => 202,
                 'pNombre' => 'Julio',
@@ -311,7 +311,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            21 => 
+            21 =>
             array (
                 'idPersona' => 212,
                 'pNombre' => 'Victor',
@@ -325,7 +325,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:56',
                 'updated_at' => '2020-04-06 11:57:56',
             ),
-            22 => 
+            22 =>
             array (
                 'idPersona' => 222,
                 'pNombre' => 'Simon',
@@ -339,7 +339,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            23 => 
+            23 =>
             array (
                 'idPersona' => 232,
                 'pNombre' => 'Maria',
@@ -353,7 +353,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            24 => 
+            24 =>
             array (
                 'idPersona' => 242,
                 'pNombre' => 'Javier',
@@ -367,7 +367,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            25 => 
+            25 =>
             array (
                 'idPersona' => 252,
                 'pNombre' => 'Epifanio',
@@ -381,7 +381,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            26 => 
+            26 =>
             array (
                 'idPersona' => 262,
                 'pNombre' => 'Adolfo',
@@ -395,7 +395,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            27 => 
+            27 =>
             array (
                 'idPersona' => 272,
                 'pNombre' => 'Alina',
@@ -409,7 +409,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            28 => 
+            28 =>
             array (
                 'idPersona' => 282,
                 'pNombre' => 'Felix',
@@ -423,13 +423,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:57',
                 'updated_at' => '2020-04-06 11:57:57',
             ),
-            29 => 
+            29 =>
             array (
                 'idPersona' => 292,
                 'pNombre' => 'Alicia',
                 'sNombre' => NULL,
                 'apellidoP' => 'Lazo',
-                'apellidoM' => ' Venegas',
+                'apellidoM' => 'Venegas',
                 'ci' => '63590309',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -437,13 +437,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            30 => 
+            30 =>
             array (
                 'idPersona' => 302,
                 'pNombre' => 'Nelida',
                 'sNombre' => NULL,
                 'apellidoP' => 'Vargas',
-                'apellidoM' => ' Calle',
+                'apellidoM' => 'Calle',
                 'ci' => '20275130',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -451,7 +451,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            31 => 
+            31 =>
             array (
                 'idPersona' => 312,
                 'pNombre' => 'Emma',
@@ -465,7 +465,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            32 => 
+            32 =>
             array (
                 'idPersona' => 322,
                 'pNombre' => 'Hugo',
@@ -479,7 +479,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            33 => 
+            33 =>
             array (
                 'idPersona' => 332,
                 'pNombre' => 'Erminia',
@@ -493,7 +493,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            34 => 
+            34 =>
             array (
                 'idPersona' => 342,
                 'pNombre' => 'Justo',
@@ -507,7 +507,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            35 => 
+            35 =>
             array (
                 'idPersona' => 352,
                 'pNombre' => 'Carlos',
@@ -521,7 +521,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            36 => 
+            36 =>
             array (
                 'idPersona' => 362,
                 'pNombre' => 'Javier',
@@ -535,7 +535,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            37 => 
+            37 =>
             array (
                 'idPersona' => 372,
                 'pNombre' => 'Nicolas',
@@ -549,7 +549,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:58',
                 'updated_at' => '2020-04-06 11:57:58',
             ),
-            38 => 
+            38 =>
             array (
                 'idPersona' => 382,
                 'pNombre' => 'Juan',
@@ -563,7 +563,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            39 => 
+            39 =>
             array (
                 'idPersona' => 392,
                 'pNombre' => 'Romina',
@@ -577,7 +577,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            40 => 
+            40 =>
             array (
                 'idPersona' => 402,
                 'pNombre' => 'Aleida',
@@ -591,7 +591,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            41 => 
+            41 =>
             array (
                 'idPersona' => 412,
                 'pNombre' => 'Fernando',
@@ -605,7 +605,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            42 => 
+            42 =>
             array (
                 'idPersona' => 422,
                 'pNombre' => 'Adolfo',
@@ -619,7 +619,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            43 => 
+            43 =>
             array (
                 'idPersona' => 432,
                 'pNombre' => 'Neysa',
@@ -633,7 +633,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            44 => 
+            44 =>
             array (
                 'idPersona' => 442,
                 'pNombre' => 'Magin',
@@ -647,7 +647,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            45 => 
+            45 =>
             array (
                 'idPersona' => 452,
                 'pNombre' => 'Silberia',
@@ -661,7 +661,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            46 => 
+            46 =>
             array (
                 'idPersona' => 462,
                 'pNombre' => 'Flora',
@@ -675,7 +675,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            47 => 
+            47 =>
             array (
                 'idPersona' => 472,
                 'pNombre' => 'Alejandria',
@@ -689,7 +689,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:57:59',
                 'updated_at' => '2020-04-06 11:57:59',
             ),
-            48 => 
+            48 =>
             array (
                 'idPersona' => 482,
                 'pNombre' => 'Eick',
@@ -703,7 +703,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            49 => 
+            49 =>
             array (
                 'idPersona' => 492,
                 'pNombre' => 'Victor',
@@ -717,7 +717,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            50 => 
+            50 =>
             array (
                 'idPersona' => 502,
                 'pNombre' => 'Eliseo',
@@ -731,7 +731,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            51 => 
+            51 =>
             array (
                 'idPersona' => 512,
                 'pNombre' => 'Julia',
@@ -745,7 +745,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            52 => 
+            52 =>
             array (
                 'idPersona' => 522,
                 'pNombre' => 'Julyata',
@@ -759,7 +759,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            53 => 
+            53 =>
             array (
                 'idPersona' => 532,
                 'pNombre' => 'Luz',
@@ -773,7 +773,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            54 => 
+            54 =>
             array (
                 'idPersona' => 542,
                 'pNombre' => 'Sandra',
@@ -787,7 +787,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            55 => 
+            55 =>
             array (
                 'idPersona' => 552,
                 'pNombre' => 'Marina',
@@ -801,7 +801,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            56 => 
+            56 =>
             array (
                 'idPersona' => 562,
                 'pNombre' => 'Zoraida',
@@ -815,7 +815,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            57 => 
+            57 =>
             array (
                 'idPersona' => 572,
                 'pNombre' => 'Rosmery',
@@ -829,7 +829,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:00',
                 'updated_at' => '2020-04-06 11:58:00',
             ),
-            58 => 
+            58 =>
             array (
                 'idPersona' => 582,
                 'pNombre' => 'Jorge',
@@ -843,7 +843,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            59 => 
+            59 =>
             array (
                 'idPersona' => 592,
                 'pNombre' => 'Alvina',
@@ -857,7 +857,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            60 => 
+            60 =>
             array (
                 'idPersona' => 602,
                 'pNombre' => 'Maribel',
@@ -871,7 +871,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            61 => 
+            61 =>
             array (
                 'idPersona' => 612,
                 'pNombre' => 'Jose',
@@ -885,7 +885,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            62 => 
+            62 =>
             array (
                 'idPersona' => 622,
                 'pNombre' => 'Victor',
@@ -899,7 +899,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            63 => 
+            63 =>
             array (
                 'idPersona' => 632,
                 'pNombre' => 'Juan',
@@ -913,7 +913,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            64 => 
+            64 =>
             array (
                 'idPersona' => 642,
                 'pNombre' => 'Juan',
@@ -927,7 +927,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:01',
                 'updated_at' => '2020-04-06 11:58:01',
             ),
-            65 => 
+            65 =>
             array (
                 'idPersona' => 652,
                 'pNombre' => 'Lucha',
@@ -941,7 +941,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:02',
                 'updated_at' => '2020-04-06 11:58:02',
             ),
-            66 => 
+            66 =>
             array (
                 'idPersona' => 662,
                 'pNombre' => 'Jose',
@@ -955,7 +955,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:02',
                 'updated_at' => '2020-04-06 11:58:02',
             ),
-            67 => 
+            67 =>
             array (
                 'idPersona' => 672,
                 'pNombre' => 'Wilfredo',
@@ -969,7 +969,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:02',
                 'updated_at' => '2020-04-06 11:58:02',
             ),
-            68 => 
+            68 =>
             array (
                 'idPersona' => 682,
                 'pNombre' => 'Anabel',
@@ -983,7 +983,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:02',
                 'updated_at' => '2020-04-06 11:58:02',
             ),
-            69 => 
+            69 =>
             array (
                 'idPersona' => 692,
                 'pNombre' => 'Jaime',
@@ -997,7 +997,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:02',
                 'updated_at' => '2020-04-06 11:58:02',
             ),
-            70 => 
+            70 =>
             array (
                 'idPersona' => 702,
                 'pNombre' => 'German',
@@ -1011,7 +1011,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:03',
                 'updated_at' => '2020-04-06 11:58:03',
             ),
-            71 => 
+            71 =>
             array (
                 'idPersona' => 712,
                 'pNombre' => 'Beatriz',
@@ -1025,13 +1025,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:03',
                 'updated_at' => '2020-04-06 11:58:03',
             ),
-            72 => 
+            72 =>
             array (
                 'idPersona' => 722,
                 'pNombre' => 'Carmen',
                 'sNombre' => NULL,
                 'apellidoP' => 'Revera',
-                'apellidoM' => ' Ledezma',
+                'apellidoM' => 'Ledezma',
                 'ci' => '25296888',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -1039,7 +1039,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:03',
                 'updated_at' => '2020-04-06 11:58:03',
             ),
-            73 => 
+            73 =>
             array (
                 'idPersona' => 732,
                 'pNombre' => 'Walter',
@@ -1053,13 +1053,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:03',
                 'updated_at' => '2020-04-06 11:58:03',
             ),
-            74 => 
+            74 =>
             array (
                 'idPersona' => 742,
                 'pNombre' => 'Pascuala',
                 'sNombre' => NULL,
                 'apellidoP' => 'Mamani',
-                'apellidoM' => ' Chuquimia',
+                'apellidoM' => 'Chuquimia',
                 'ci' => '2057297',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1954-04-11',
@@ -1067,7 +1067,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:03',
                 'updated_at' => '2020-04-06 11:58:03',
             ),
-            75 => 
+            75 =>
             array (
                 'idPersona' => 752,
                 'pNombre' => 'Tito',
@@ -1081,13 +1081,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:03',
                 'updated_at' => '2020-04-06 11:58:03',
             ),
-            76 => 
+            76 =>
             array (
                 'idPersona' => 762,
                 'pNombre' => 'Adriana',
                 'sNombre' => NULL,
                 'apellidoP' => 'Pinto',
-                'apellidoM' => ' Oros',
+                'apellidoM' => 'Oros',
                 'ci' => '90015449',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -1095,7 +1095,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:04',
                 'updated_at' => '2020-04-06 11:58:04',
             ),
-            77 => 
+            77 =>
             array (
                 'idPersona' => 772,
                 'pNombre' => 'Enrrique',
@@ -1109,7 +1109,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:04',
                 'updated_at' => '2020-04-06 11:58:04',
             ),
-            78 => 
+            78 =>
             array (
                 'idPersona' => 782,
                 'pNombre' => 'Jose',
@@ -1123,7 +1123,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:04',
                 'updated_at' => '2020-04-06 11:58:04',
             ),
-            79 => 
+            79 =>
             array (
                 'idPersona' => 792,
                 'pNombre' => 'Silvia',
@@ -1137,13 +1137,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:04',
                 'updated_at' => '2020-04-06 11:58:04',
             ),
-            80 => 
+            80 =>
             array (
                 'idPersona' => 802,
                 'pNombre' => 'Saida',
                 'sNombre' => NULL,
                 'apellidoP' => 'Guzman',
-                'apellidoM' => ' Colque',
+                'apellidoM' => 'Colque',
                 'ci' => '3569701',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1965-03-17',
@@ -1151,7 +1151,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:04',
                 'updated_at' => '2020-04-06 11:58:04',
             ),
-            81 => 
+            81 =>
             array (
                 'idPersona' => 812,
                 'pNombre' => 'Omar',
@@ -1165,7 +1165,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:04',
                 'updated_at' => '2020-04-06 11:58:04',
             ),
-            82 => 
+            82 =>
             array (
                 'idPersona' => 822,
                 'pNombre' => 'Alberto',
@@ -1179,7 +1179,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            83 => 
+            83 =>
             array (
                 'idPersona' => 832,
                 'pNombre' => 'Maria',
@@ -1193,7 +1193,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            84 => 
+            84 =>
             array (
                 'idPersona' => 842,
                 'pNombre' => 'Bernardo',
@@ -1207,7 +1207,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            85 => 
+            85 =>
             array (
                 'idPersona' => 852,
                 'pNombre' => 'Rudy',
@@ -1221,7 +1221,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            86 => 
+            86 =>
             array (
                 'idPersona' => 862,
                 'pNombre' => 'Felix',
@@ -1235,7 +1235,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            87 => 
+            87 =>
             array (
                 'idPersona' => 872,
                 'pNombre' => 'Enrrique',
@@ -1249,7 +1249,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            88 => 
+            88 =>
             array (
                 'idPersona' => 882,
                 'pNombre' => 'Alvaro',
@@ -1263,7 +1263,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:05',
                 'updated_at' => '2020-04-06 11:58:05',
             ),
-            89 => 
+            89 =>
             array (
                 'idPersona' => 892,
                 'pNombre' => 'Bicman',
@@ -1277,13 +1277,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            90 => 
+            90 =>
             array (
                 'idPersona' => 902,
                 'pNombre' => 'Renata',
                 'sNombre' => NULL,
                 'apellidoP' => 'Ledezma',
-                'apellidoM' => ' Terceros',
+                'apellidoM' => 'Terceros',
                 'ci' => '3748741',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1942-02-26',
@@ -1291,7 +1291,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            91 => 
+            91 =>
             array (
                 'idPersona' => 912,
                 'pNombre' => 'Victor',
@@ -1305,7 +1305,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            92 => 
+            92 =>
             array (
                 'idPersona' => 922,
                 'pNombre' => 'Linsay',
@@ -1319,7 +1319,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            93 => 
+            93 =>
             array (
                 'idPersona' => 932,
                 'pNombre' => 'Benigno',
@@ -1333,7 +1333,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            94 => 
+            94 =>
             array (
                 'idPersona' => 942,
                 'pNombre' => 'Cristobal',
@@ -1347,7 +1347,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            95 => 
+            95 =>
             array (
                 'idPersona' => 952,
                 'pNombre' => 'Henrry',
@@ -1361,7 +1361,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:06',
                 'updated_at' => '2020-04-06 11:58:06',
             ),
-            96 => 
+            96 =>
             array (
                 'idPersona' => 962,
                 'pNombre' => 'Ximena',
@@ -1375,7 +1375,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            97 => 
+            97 =>
             array (
                 'idPersona' => 972,
                 'pNombre' => 'Sagrada',
@@ -1389,7 +1389,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            98 => 
+            98 =>
             array (
                 'idPersona' => 982,
                 'pNombre' => 'Lourdes',
@@ -1403,13 +1403,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            99 => 
+            99 =>
             array (
                 'idPersona' => 992,
                 'pNombre' => 'Maria',
                 'sNombre' => 'Aida',
                 'apellidoP' => 'Vargas',
-                'apellidoM' => ' Camacho',
+                'apellidoM' => 'Camacho',
                 'ci' => '67343328',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -1417,7 +1417,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            100 => 
+            100 =>
             array (
                 'idPersona' => 1002,
                 'pNombre' => 'Auro',
@@ -1431,7 +1431,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            101 => 
+            101 =>
             array (
                 'idPersona' => 1012,
                 'pNombre' => 'Jose',
@@ -1445,7 +1445,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            102 => 
+            102 =>
             array (
                 'idPersona' => 1022,
                 'pNombre' => 'Sonia',
@@ -1459,7 +1459,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            103 => 
+            103 =>
             array (
                 'idPersona' => 1032,
                 'pNombre' => 'Felix',
@@ -1473,13 +1473,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:07',
                 'updated_at' => '2020-04-06 11:58:07',
             ),
-            104 => 
+            104 =>
             array (
                 'idPersona' => 1042,
                 'pNombre' => 'Angelica',
                 'sNombre' => NULL,
                 'apellidoP' => 'Agreda',
-                'apellidoM' => ' Garcia',
+                'apellidoM' => 'Garcia',
                 'ci' => '1411326',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1952-02-04',
@@ -1487,7 +1487,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            105 => 
+            105 =>
             array (
                 'idPersona' => 1052,
                 'pNombre' => 'Jorge',
@@ -1501,13 +1501,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            106 => 
+            106 =>
             array (
                 'idPersona' => 1062,
                 'pNombre' => 'Benigna',
                 'sNombre' => NULL,
                 'apellidoP' => 'Bazoalto',
-                'apellidoM' => ' Vazquez',
+                'apellidoM' => 'Vazquez',
                 'ci' => '2919722',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1955-06-28',
@@ -1515,7 +1515,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            107 => 
+            107 =>
             array (
                 'idPersona' => 1072,
                 'pNombre' => 'Alexis',
@@ -1529,7 +1529,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            108 => 
+            108 =>
             array (
                 'idPersona' => 1082,
                 'pNombre' => 'Eliseo',
@@ -1543,13 +1543,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            109 => 
+            109 =>
             array (
                 'idPersona' => 1092,
                 'pNombre' => 'Martina',
                 'sNombre' => NULL,
                 'apellidoP' => 'Ortiz',
-                'apellidoM' => ' Beltran',
+                'apellidoM' => 'Beltran',
                 'ci' => '34495641',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -1557,7 +1557,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            110 => 
+            110 =>
             array (
                 'idPersona' => 1102,
                 'pNombre' => 'Florencio',
@@ -1571,7 +1571,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            111 => 
+            111 =>
             array (
                 'idPersona' => 1112,
                 'pNombre' => 'Severo',
@@ -1585,7 +1585,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            112 => 
+            112 =>
             array (
                 'idPersona' => 1122,
                 'pNombre' => 'Mildreth',
@@ -1599,7 +1599,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:08',
                 'updated_at' => '2020-04-06 11:58:08',
             ),
-            113 => 
+            113 =>
             array (
                 'idPersona' => 1132,
                 'pNombre' => 'Maria',
@@ -1613,7 +1613,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            114 => 
+            114 =>
             array (
                 'idPersona' => 1142,
                 'pNombre' => 'Maria',
@@ -1627,7 +1627,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            115 => 
+            115 =>
             array (
                 'idPersona' => 1152,
                 'pNombre' => 'Nelson',
@@ -1641,7 +1641,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            116 => 
+            116 =>
             array (
                 'idPersona' => 1162,
                 'pNombre' => 'Ramiro',
@@ -1655,7 +1655,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            117 => 
+            117 =>
             array (
                 'idPersona' => 1172,
                 'pNombre' => 'Marina',
@@ -1669,7 +1669,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            118 => 
+            118 =>
             array (
                 'idPersona' => 1182,
                 'pNombre' => 'David',
@@ -1683,7 +1683,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            119 => 
+            119 =>
             array (
                 'idPersona' => 1192,
                 'pNombre' => 'Saul',
@@ -1697,7 +1697,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:09',
                 'updated_at' => '2020-04-06 11:58:09',
             ),
-            120 => 
+            120 =>
             array (
                 'idPersona' => 1202,
                 'pNombre' => 'Lucy',
@@ -1711,7 +1711,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            121 => 
+            121 =>
             array (
                 'idPersona' => 1212,
                 'pNombre' => 'Casto',
@@ -1725,7 +1725,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            122 => 
+            122 =>
             array (
                 'idPersona' => 1222,
                 'pNombre' => 'Ruben',
@@ -1739,7 +1739,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            123 => 
+            123 =>
             array (
                 'idPersona' => 1232,
                 'pNombre' => 'Pascual',
@@ -1753,7 +1753,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            124 => 
+            124 =>
             array (
                 'idPersona' => 1242,
                 'pNombre' => 'Emilia',
@@ -1767,7 +1767,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            125 => 
+            125 =>
             array (
                 'idPersona' => 1252,
                 'pNombre' => 'Yonny',
@@ -1781,7 +1781,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            126 => 
+            126 =>
             array (
                 'idPersona' => 1262,
                 'pNombre' => 'Javier',
@@ -1795,13 +1795,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            127 => 
+            127 =>
             array (
                 'idPersona' => 1272,
                 'pNombre' => 'Emiliana',
                 'sNombre' => NULL,
                 'apellidoP' => 'Inoche',
-                'apellidoM' => ' Orellana',
+                'apellidoM' => 'Orellana',
                 'ci' => '860445',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1947-08-20',
@@ -1809,7 +1809,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            128 => 
+            128 =>
             array (
                 'idPersona' => 1282,
                 'pNombre' => 'Emigdio',
@@ -1823,7 +1823,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            129 => 
+            129 =>
             array (
                 'idPersona' => 1292,
                 'pNombre' => 'Richard',
@@ -1837,7 +1837,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:10',
                 'updated_at' => '2020-04-06 11:58:10',
             ),
-            130 => 
+            130 =>
             array (
                 'idPersona' => 1302,
                 'pNombre' => 'Angel',
@@ -1851,7 +1851,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            131 => 
+            131 =>
             array (
                 'idPersona' => 1312,
                 'pNombre' => 'Hilda',
@@ -1865,13 +1865,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            132 => 
+            132 =>
             array (
                 'idPersona' => 1322,
                 'pNombre' => 'Mirian',
                 'sNombre' => 'Esperanza',
                 'apellidoP' => 'Callapa',
-                'apellidoM' => ' Rioja',
+                'apellidoM' => 'Rioja',
                 'ci' => '5277818',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1980-09-06',
@@ -1879,7 +1879,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            133 => 
+            133 =>
             array (
                 'idPersona' => 1332,
                 'pNombre' => 'Abac',
@@ -1893,7 +1893,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            134 => 
+            134 =>
             array (
                 'idPersona' => 1342,
                 'pNombre' => 'Zaida',
@@ -1907,7 +1907,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            135 => 
+            135 =>
             array (
                 'idPersona' => 1352,
                 'pNombre' => 'Feliciano',
@@ -1921,7 +1921,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            136 => 
+            136 =>
             array (
                 'idPersona' => 1362,
                 'pNombre' => 'Benigno',
@@ -1935,7 +1935,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            137 => 
+            137 =>
             array (
                 'idPersona' => 1372,
                 'pNombre' => 'Fortunato',
@@ -1949,7 +1949,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            138 => 
+            138 =>
             array (
                 'idPersona' => 1382,
                 'pNombre' => 'Golden',
@@ -1963,7 +1963,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            139 => 
+            139 =>
             array (
                 'idPersona' => 1392,
                 'pNombre' => 'Juan',
@@ -1977,7 +1977,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:11',
                 'updated_at' => '2020-04-06 11:58:11',
             ),
-            140 => 
+            140 =>
             array (
                 'idPersona' => 1402,
                 'pNombre' => 'Julio',
@@ -1991,7 +1991,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            141 => 
+            141 =>
             array (
                 'idPersona' => 1412,
                 'pNombre' => 'Mario',
@@ -2005,7 +2005,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            142 => 
+            142 =>
             array (
                 'idPersona' => 1422,
                 'pNombre' => 'Ramiro',
@@ -2019,7 +2019,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            143 => 
+            143 =>
             array (
                 'idPersona' => 1432,
                 'pNombre' => 'Jhanneth',
@@ -2033,7 +2033,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            144 => 
+            144 =>
             array (
                 'idPersona' => 1442,
                 'pNombre' => 'Valentin',
@@ -2047,7 +2047,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            145 => 
+            145 =>
             array (
                 'idPersona' => 1452,
                 'pNombre' => 'Hugo',
@@ -2061,7 +2061,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            146 => 
+            146 =>
             array (
                 'idPersona' => 1462,
                 'pNombre' => 'Fabian',
@@ -2075,7 +2075,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:12',
                 'updated_at' => '2020-04-06 11:58:12',
             ),
-            147 => 
+            147 =>
             array (
                 'idPersona' => 1472,
                 'pNombre' => 'Froilan',
@@ -2089,7 +2089,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:13',
                 'updated_at' => '2020-04-06 11:58:13',
             ),
-            148 => 
+            148 =>
             array (
                 'idPersona' => 1482,
                 'pNombre' => 'Celso',
@@ -2103,7 +2103,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:13',
                 'updated_at' => '2020-04-06 11:58:13',
             ),
-            149 => 
+            149 =>
             array (
                 'idPersona' => 1492,
                 'pNombre' => 'Feliz',
@@ -2117,7 +2117,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:13',
                 'updated_at' => '2020-04-06 11:58:13',
             ),
-            150 => 
+            150 =>
             array (
                 'idPersona' => 1502,
                 'pNombre' => 'Alberto',
@@ -2131,7 +2131,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:13',
                 'updated_at' => '2020-04-06 11:58:13',
             ),
-            151 => 
+            151 =>
             array (
                 'idPersona' => 1512,
                 'pNombre' => 'Yhonny',
@@ -2145,7 +2145,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:13',
                 'updated_at' => '2020-04-06 11:58:13',
             ),
-            152 => 
+            152 =>
             array (
                 'idPersona' => 1522,
                 'pNombre' => 'Susana',
@@ -2159,13 +2159,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:13',
                 'updated_at' => '2020-04-06 11:58:13',
             ),
-            153 => 
+            153 =>
             array (
                 'idPersona' => 1532,
                 'pNombre' => 'Vitalia',
                 'sNombre' => NULL,
                 'apellidoP' => 'Guzman',
-                'apellidoM' => ' Abasto',
+                'apellidoM' => 'Abasto',
                 'ci' => '57000242',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -2173,7 +2173,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:14',
                 'updated_at' => '2020-04-06 11:58:14',
             ),
-            154 => 
+            154 =>
             array (
                 'idPersona' => 1542,
                 'pNombre' => 'Elias',
@@ -2187,7 +2187,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:14',
                 'updated_at' => '2020-04-06 11:58:14',
             ),
-            155 => 
+            155 =>
             array (
                 'idPersona' => 1552,
                 'pNombre' => 'Carlos',
@@ -2201,7 +2201,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:14',
                 'updated_at' => '2020-04-06 11:58:14',
             ),
-            156 => 
+            156 =>
             array (
                 'idPersona' => 1562,
                 'pNombre' => 'Dante',
@@ -2215,7 +2215,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:14',
                 'updated_at' => '2020-04-06 11:58:14',
             ),
-            157 => 
+            157 =>
             array (
                 'idPersona' => 1572,
                 'pNombre' => 'Jhon',
@@ -2229,7 +2229,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:14',
                 'updated_at' => '2020-04-06 11:58:14',
             ),
-            158 => 
+            158 =>
             array (
                 'idPersona' => 1582,
                 'pNombre' => 'Edson',
@@ -2243,7 +2243,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:15',
                 'updated_at' => '2020-04-06 11:58:15',
             ),
-            159 => 
+            159 =>
             array (
                 'idPersona' => 1592,
                 'pNombre' => 'Boris',
@@ -2257,7 +2257,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:15',
                 'updated_at' => '2020-04-06 11:58:15',
             ),
-            160 => 
+            160 =>
             array (
                 'idPersona' => 1602,
                 'pNombre' => 'Julian',
@@ -2271,7 +2271,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:15',
                 'updated_at' => '2020-04-06 11:58:15',
             ),
-            161 => 
+            161 =>
             array (
                 'idPersona' => 1612,
                 'pNombre' => 'Gonzalo',
@@ -2285,7 +2285,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:15',
                 'updated_at' => '2020-04-06 11:58:15',
             ),
-            162 => 
+            162 =>
             array (
                 'idPersona' => 1622,
                 'pNombre' => 'Wilma',
@@ -2299,13 +2299,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:15',
                 'updated_at' => '2020-04-06 11:58:15',
             ),
-            163 => 
+            163 =>
             array (
                 'idPersona' => 1632,
                 'pNombre' => 'Maria',
                 'sNombre' => 'Margarita',
                 'apellidoP' => 'Quiroz',
-                'apellidoM' => ' Gomez',
+                'apellidoM' => 'Gomez',
                 'ci' => '3786704',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1957-08-27',
@@ -2313,7 +2313,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            164 => 
+            164 =>
             array (
                 'idPersona' => 1642,
                 'pNombre' => 'Sinforosa',
@@ -2327,7 +2327,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            165 => 
+            165 =>
             array (
                 'idPersona' => 1652,
                 'pNombre' => 'Guillermo',
@@ -2341,7 +2341,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            166 => 
+            166 =>
             array (
                 'idPersona' => 1662,
                 'pNombre' => 'Lidia',
@@ -2355,7 +2355,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            167 => 
+            167 =>
             array (
                 'idPersona' => 1672,
                 'pNombre' => 'Carmelo',
@@ -2369,7 +2369,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            168 => 
+            168 =>
             array (
                 'idPersona' => 1682,
                 'pNombre' => 'Esther',
@@ -2383,7 +2383,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            169 => 
+            169 =>
             array (
                 'idPersona' => 1692,
                 'pNombre' => 'Elias',
@@ -2397,13 +2397,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            170 => 
+            170 =>
             array (
                 'idPersona' => 1702,
                 'pNombre' => 'Elsa',
                 'sNombre' => NULL,
                 'apellidoP' => 'Gutierrez',
-                'apellidoM' => ' Coca',
+                'apellidoM' => 'Coca',
                 'ci' => '29464260',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '2020-04-06',
@@ -2411,7 +2411,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:16',
                 'updated_at' => '2020-04-06 11:58:16',
             ),
-            171 => 
+            171 =>
             array (
                 'idPersona' => 1712,
                 'pNombre' => 'Jianeth',
@@ -2425,7 +2425,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            172 => 
+            172 =>
             array (
                 'idPersona' => 1722,
                 'pNombre' => 'Wilfredo',
@@ -2439,13 +2439,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            173 => 
+            173 =>
             array (
                 'idPersona' => 1732,
                 'pNombre' => 'Susana',
                 'sNombre' => NULL,
                 'apellidoP' => 'Enrriquez',
-                'apellidoM' => ' Herrera',
+                'apellidoM' => 'Herrera',
                 'ci' => '3587117',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1966-09-20',
@@ -2453,7 +2453,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            174 => 
+            174 =>
             array (
                 'idPersona' => 1742,
                 'pNombre' => 'Ricardo',
@@ -2467,13 +2467,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            175 => 
+            175 =>
             array (
                 'idPersona' => 1752,
                 'pNombre' => 'Elizabeth',
                 'sNombre' => NULL,
                 'apellidoP' => 'Ochoa',
-                'apellidoM' => ' Otalora',
+                'apellidoM' => 'Otalora',
                 'ci' => '5239428',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1975-11-06',
@@ -2481,7 +2481,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            176 => 
+            176 =>
             array (
                 'idPersona' => 1762,
                 'pNombre' => 'Nicolas',
@@ -2495,7 +2495,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            177 => 
+            177 =>
             array (
                 'idPersona' => 1772,
                 'pNombre' => 'Saturnino',
@@ -2509,7 +2509,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            178 => 
+            178 =>
             array (
                 'idPersona' => 1782,
                 'pNombre' => 'Inez',
@@ -2523,7 +2523,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            179 => 
+            179 =>
             array (
                 'idPersona' => 1792,
                 'pNombre' => 'Julieta',
@@ -2537,7 +2537,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            180 => 
+            180 =>
             array (
                 'idPersona' => 1802,
                 'pNombre' => 'Orlando',
@@ -2551,7 +2551,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:17',
                 'updated_at' => '2020-04-06 11:58:17',
             ),
-            181 => 
+            181 =>
             array (
                 'idPersona' => 1812,
                 'pNombre' => 'Juan',
@@ -2565,7 +2565,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            182 => 
+            182 =>
             array (
                 'idPersona' => 1822,
                 'pNombre' => 'Cristobal',
@@ -2579,7 +2579,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            183 => 
+            183 =>
             array (
                 'idPersona' => 1832,
                 'pNombre' => 'Lina',
@@ -2593,7 +2593,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            184 => 
+            184 =>
             array (
                 'idPersona' => 1842,
                 'pNombre' => 'Remberto',
@@ -2607,7 +2607,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            185 => 
+            185 =>
             array (
                 'idPersona' => 1852,
                 'pNombre' => 'Pedro',
@@ -2621,7 +2621,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            186 => 
+            186 =>
             array (
                 'idPersona' => 1862,
                 'pNombre' => 'Jorge',
@@ -2635,7 +2635,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            187 => 
+            187 =>
             array (
                 'idPersona' => 1872,
                 'pNombre' => 'Javier',
@@ -2649,7 +2649,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            188 => 
+            188 =>
             array (
                 'idPersona' => 1882,
                 'pNombre' => 'Nemecio',
@@ -2663,7 +2663,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            189 => 
+            189 =>
             array (
                 'idPersona' => 1892,
                 'pNombre' => 'Juan',
@@ -2677,7 +2677,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            190 => 
+            190 =>
             array (
                 'idPersona' => 1902,
                 'pNombre' => 'Agustina',
@@ -2691,7 +2691,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:18',
                 'updated_at' => '2020-04-06 11:58:18',
             ),
-            191 => 
+            191 =>
             array (
                 'idPersona' => 1912,
                 'pNombre' => 'Maria',
@@ -2705,7 +2705,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            192 => 
+            192 =>
             array (
                 'idPersona' => 1922,
                 'pNombre' => 'Alfredo',
@@ -2719,7 +2719,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            193 => 
+            193 =>
             array (
                 'idPersona' => 1932,
                 'pNombre' => 'Juana',
@@ -2733,7 +2733,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            194 => 
+            194 =>
             array (
                 'idPersona' => 1942,
                 'pNombre' => 'Roberta',
@@ -2747,7 +2747,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            195 => 
+            195 =>
             array (
                 'idPersona' => 1952,
                 'pNombre' => 'Wilson',
@@ -2761,7 +2761,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            196 => 
+            196 =>
             array (
                 'idPersona' => 1962,
                 'pNombre' => 'Nancy',
@@ -2775,7 +2775,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            197 => 
+            197 =>
             array (
                 'idPersona' => 1972,
                 'pNombre' => 'Martin',
@@ -2789,7 +2789,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            198 => 
+            198 =>
             array (
                 'idPersona' => 1982,
                 'pNombre' => 'Marcela',
@@ -2803,7 +2803,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            199 => 
+            199 =>
             array (
                 'idPersona' => 1992,
                 'pNombre' => 'Epifania',
@@ -2817,7 +2817,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:19',
                 'updated_at' => '2020-04-06 11:58:19',
             ),
-            200 => 
+            200 =>
             array (
                 'idPersona' => 2002,
                 'pNombre' => 'Lidia',
@@ -2831,7 +2831,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            201 => 
+            201 =>
             array (
                 'idPersona' => 2012,
                 'pNombre' => 'Delia',
@@ -2845,7 +2845,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            202 => 
+            202 =>
             array (
                 'idPersona' => 2022,
                 'pNombre' => 'Brido',
@@ -2859,7 +2859,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            203 => 
+            203 =>
             array (
                 'idPersona' => 2032,
                 'pNombre' => 'Javier',
@@ -2873,7 +2873,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            204 => 
+            204 =>
             array (
                 'idPersona' => 2042,
                 'pNombre' => 'Ruben',
@@ -2887,7 +2887,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            205 => 
+            205 =>
             array (
                 'idPersona' => 2052,
                 'pNombre' => 'Leoncio',
@@ -2901,7 +2901,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            206 => 
+            206 =>
             array (
                 'idPersona' => 2062,
                 'pNombre' => 'Ana',
@@ -2915,7 +2915,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            207 => 
+            207 =>
             array (
                 'idPersona' => 2072,
                 'pNombre' => 'Lilian',
@@ -2929,7 +2929,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            208 => 
+            208 =>
             array (
                 'idPersona' => 2082,
                 'pNombre' => 'Mabel',
@@ -2943,7 +2943,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:20',
                 'updated_at' => '2020-04-06 11:58:20',
             ),
-            209 => 
+            209 =>
             array (
                 'idPersona' => 2092,
                 'pNombre' => 'Iber',
@@ -2957,7 +2957,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            210 => 
+            210 =>
             array (
                 'idPersona' => 2102,
                 'pNombre' => 'Julieta',
@@ -2971,7 +2971,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            211 => 
+            211 =>
             array (
                 'idPersona' => 2112,
                 'pNombre' => 'Jhonatan',
@@ -2985,7 +2985,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            212 => 
+            212 =>
             array (
                 'idPersona' => 2122,
                 'pNombre' => 'Roxana',
@@ -2999,7 +2999,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            213 => 
+            213 =>
             array (
                 'idPersona' => 2132,
                 'pNombre' => 'Rene',
@@ -3013,7 +3013,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            214 => 
+            214 =>
             array (
                 'idPersona' => 2142,
                 'pNombre' => 'Feliz',
@@ -3027,7 +3027,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            215 => 
+            215 =>
             array (
                 'idPersona' => 2152,
                 'pNombre' => 'Hilarion',
@@ -3041,7 +3041,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            216 => 
+            216 =>
             array (
                 'idPersona' => 2162,
                 'pNombre' => 'Nelsa',
@@ -3055,7 +3055,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:21',
                 'updated_at' => '2020-04-06 11:58:21',
             ),
-            217 => 
+            217 =>
             array (
                 'idPersona' => 2172,
                 'pNombre' => 'Javier',
@@ -3069,7 +3069,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            218 => 
+            218 =>
             array (
                 'idPersona' => 2182,
                 'pNombre' => 'Victor',
@@ -3083,7 +3083,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            219 => 
+            219 =>
             array (
                 'idPersona' => 2192,
                 'pNombre' => 'Alicia',
@@ -3097,7 +3097,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            220 => 
+            220 =>
             array (
                 'idPersona' => 2202,
                 'pNombre' => 'Jose',
@@ -3111,7 +3111,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            221 => 
+            221 =>
             array (
                 'idPersona' => 2212,
                 'pNombre' => 'Felipe',
@@ -3125,7 +3125,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            222 => 
+            222 =>
             array (
                 'idPersona' => 2222,
                 'pNombre' => 'Damian',
@@ -3139,13 +3139,13 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            223 => 
+            223 =>
             array (
                 'idPersona' => 2232,
                 'pNombre' => 'Inocencia',
                 'sNombre' => NULL,
                 'apellidoP' => 'Cruz',
-                'apellidoM' => ' Mamani',
+                'apellidoM' => 'Mamani',
                 'ci' => '7891935',
                 'expxedicion' => 'COCHABAMBA',
                 'fechaNacimiento' => '1974-12-08',
@@ -3153,7 +3153,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            224 => 
+            224 =>
             array (
                 'idPersona' => 2242,
                 'pNombre' => 'Miriam',
@@ -3167,7 +3167,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            225 => 
+            225 =>
             array (
                 'idPersona' => 2252,
                 'pNombre' => 'Radio',
@@ -3181,7 +3181,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:22',
                 'updated_at' => '2020-04-06 11:58:22',
             ),
-            226 => 
+            226 =>
             array (
                 'idPersona' => 2262,
                 'pNombre' => 'Pantaleon',
@@ -3195,7 +3195,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:23',
                 'updated_at' => '2020-04-06 11:58:23',
             ),
-            227 => 
+            227 =>
             array (
                 'idPersona' => 2272,
                 'pNombre' => 'Rosalia',
@@ -3209,7 +3209,7 @@ class PersonasTableSeeder extends Seeder
                 'created_at' => '2020-04-06 11:58:23',
                 'updated_at' => '2020-04-06 11:58:23',
             ),
-            228 => 
+            228 =>
             array (
                 'idPersona' => 2282,
                 'pNombre' => 'Martha',
@@ -3224,7 +3224,7 @@ class PersonasTableSeeder extends Seeder
                 'updated_at' => '2020-04-06 11:58:23',
             ),
         ));
-        
-        
+
+
     }
 }

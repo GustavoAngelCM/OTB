@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Http;
 use Webpatser\Uuid\Uuid;
 
 class CancellationController extends Controller
@@ -20,146 +19,154 @@ class CancellationController extends Controller
         $user = Auth::user();
         if ($user->tipoUsuario_id == 1)
         {
-            $changeCoin = Http::get('https://api.cambio.today/v1/full/BOB/json?key=4234|S^9b_2vNDkPjc~eR1Dr^4q3Y2fZfJxAA');
-            $key = Uuid::generate()->string;
-            $validator = Validator::make(
-                [
-                    'cancellations' => $request->input('cancellations'),
-                    'keyCancelacion' => $key
-                ],
-                [
-                    'cancellations' => 'bail|required',
-                    'keyCancelacion' => 'bail|required|unique:cancelacions'
-                ]
-            );
-            $errors = $validator->errors();
-            if ($validator->fails())
+            try
+            {
+                $key = Uuid::generate()->string;
+                $validator = Validator::make(
+                    Cancelacion::inputRulesCancellation($request->input('cancellations'), $key),
+                    Cancelacion::rulesCancellation()
+                );
+                $errors = $validator->errors();
+                if ($validator->fails())
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Formato incorrecto.',
+                        'errors' => $errors->messages(),
+                    ], 400);
+                }
+                else
+                {
+                    $validator = null;
+                    $error = false;
+                    $total = 0;
+                    $moneda = '';
+                    $tipo = '';
+                    foreach ($request->input('cancellations') as $clave => $valor)
+                    {
+                        $validator = Validator::make(
+                            Cancelacion::inputRulesBindingToReading($valor['key'], $valor['monto'], $valor['multa'], $valor['moneda'], $valor['tipo']),
+                            Cancelacion::rulesBindingToReading()
+                        );
+                        if ($validator->fails())
+                        {
+                            $error = true;
+                            break;
+                        }
+                        $total += ($valor['monto'] + $valor['multa']);
+                        $moneda = $valor['moneda'];
+                        $tipo = $valor['tipo'];
+                    }
+                    if ($error === true)
+                    {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Formato incorrecto.',
+                            'errors' => $validator->errors()->messages(),
+                        ], 400);
+                    }
+
+                    $configCancellations = ConfiguracionCancelacion::activeConfiguration();
+                    $configDiscount = $configCancellations->descuentoCobroAgua;
+                    $discountArray = ($configDiscount === null) ? null : explode("=>", $configDiscount);
+                    $initialDateDiscount = ($configDiscount === null) ? null : Carbon::parse($discountArray[1]);
+                    $finalDateDiscount = ($configDiscount === null) ? null : Carbon::parse($discountArray[2]);
+                    $percentage = ($configDiscount === null) ? null : (int) $discountArray[3];
+
+                    $counterDiscount = 0;
+
+                    $requestCancellation = new Cancelacion();
+                    $requestCancellation->prepareSaving($total, $key, $moneda, $tipo);
+
+                    $cancellationCurrent = $requestCancellation->getDataCancellation();
+
+                    foreach ($request->input('cancellations') as $clave => $valor)
+                    {
+                        $historyPendingValid = HistorialCancelacion::pendingValid($valor['key']);
+
+                        $readingToFind = Lecturas::findReading($valor['key']);
+
+                        if ( ($readingToFind->fechaMedicion >= $initialDateDiscount) && ($readingToFind->fechaMedicion <= $finalDateDiscount)  && $configDiscount !== null)
+                        {
+                            $counterDiscount++;
+                        }
+
+                        $amountChanged = $requestCancellation->changeCoin($requestCancellation->moneda, $valor['monto']);
+
+                        $subTotal = Cancelacion::subTotalLogicCancellation($historyPendingValid->diferenciaMedida, $configCancellations->montoCuboAgua, $configCancellations->montoMinimoCancelacion);
+
+                        $state = Cancelacion::statePercentageLogicCancellation($amountChanged + Cancelacion::calculatedTotalCancelled($valor['key']), $subTotal, $counterDiscount>0, $percentage);
+
+                        HistorialCancelacion::_instanceAndSaving(
+                            $valor['key'],
+                            $cancellationCurrent->numero,
+                            $historyPendingValid->diferenciaMedida,
+                            $configCancellations->montoCuboAgua,
+                            $subTotal,
+                            $amountChanged,
+                            $state
+                        );
+
+                        if ($valor['multa'] > 0)
+                        {
+                            $historyPendingValid = HistorialCancelacion::pendingValidFine($valor['key']);
+                            HistorialCancelacion::_instanceAndSaving(
+                                $valor['key'],
+                                $cancellationCurrent->numero,
+                                0,
+                                0,
+                                $historyPendingValid->subTotal,
+                                $configCancellations->montoMultaConsumoAgua,
+                                'COMPLETED'
+                            );
+                        }
+                        else
+                        {
+                            if  ( ($readingToFind->fechaMedicion >= $initialDateDiscount) && ($readingToFind->fechaMedicion <= $finalDateDiscount) )
+                            {
+                                $historyPendingValid = HistorialCancelacion::pendingValidFine($valor['key']);
+                                if ($historyPendingValid)
+                                {
+                                    HistorialCancelacion::_instanceAndSaving(
+                                        $valor['key'],
+                                        $cancellationCurrent->numero,
+                                        0,
+                                        0,
+                                        $historyPendingValid->subTotal,
+                                        0,
+                                        'COMPLETED'
+                                    );
+                                }
+                            }
+                        }
+
+                    }
+
+                    if ($counterDiscount > 0)
+                    {
+                        $requestCancellation->descuento = true;
+                        $requestCancellation->update();
+                    }
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Cancelación realizada exitosamente.',
+                        'data' => [
+                            'cancel_data' => $requestCancellation->getDataCancellation(),
+                            'months' => Cancelacion::mountAndFineDataBindingHistoryForCancellation($key),
+                            'partner'=> $requestCancellation->getDataPartnerReadingToCancellation()
+                        ]
+                    ], 200);
+                }
+            }
+            catch (\Exception $e)
             {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Formato incorrecto.',
-                    'errors' => $errors->messages(),
+                    'message' => 'No se pudo completar la solicitud',
+                    "error" => $e
                 ], 400);
             }
-            else
-            {
-                return $changeCoin->body();
-
-            }
-//            else
-//            {
-//                $validator = null;
-//                $error = false;
-//                $total = 0;
-//                $moneda = '';
-//                $tipo = '';
-//                foreach ($request->input('cancellations') as $clave => $valor)
-//                {
-//                    $validator = Validator::make(
-//                        [
-//                            'key' => $valor['key'],
-//                            'monto' => $valor['monto'],
-//                            'multa' => $valor['multa'],
-//                            'moneda' => $valor['moneda'],
-//                            'tipo' => $valor['tipo'],
-//                        ],
-//                        [
-//                            'idLectura' => 'bail|required|numeric',
-//                            'monto' => 'bail|required|numeric',
-//                            'multa' => 'bail|required|numeric',
-//                            'moneda' => 'bail|required',
-//                            'tipo' => 'bail|required',
-//                        ]
-//                    );
-//                    if ($validator->fails())
-//                    {
-//                        $error = true;
-//                        break;
-//                    }
-//                    $total += $valor['monto'];
-//                    $moneda = $valor['moneda'];
-//                    $tipo = $valor['tipo'];
-//                }
-//                if ($error == true)
-//                {
-//                    return response()->json([
-//                        'success' => false,
-//                        'message' => 'Formato incorrecto.',
-//                        'errors' => $validator->errors()->messages(),
-//                    ], 400);
-//                }
-//                else
-//                {
-//                    $configCancellations = ConfiguracionCancelacion::where('activo', '=', 1)->orderBy('created_at', 'desc')->get()->first();
-//                    $configDiscount = $configCancellations->descuentoCobroAgua;
-//                    $discountArray = explode("=>", $configDiscount);
-//                    $initialDateDiscount = Carbon::parse($discountArray[1]);
-//                    $finalDateDiscount = Carbon::parse($discountArray[2]);
-//                    $percentage = (int) $discountArray[3];
-//                    $discount = false;
-//                    $counterDiscount = 0;
-//
-//                    $requestCancellation = new Cancelacion();
-//                    $requestCancellation->montoCancelacion = $total;
-//                    $requestCancellation->keyCancelacion = $key;
-//                    $requestCancellation->moneda = $moneda;
-//                    $requestCancellation->tipoCancelacion = $tipo;
-//                    $requestCancellation->save();
-//
-//                    $cancellationCurrent = Cancelacion::where('keyCancelacion', '=', $key)->get()->first();
-//
-//                    foreach ($request->input('cancellations') as $clave => $valor)
-//                    {
-//                        $historyPendingValid = HistorialCancelacion::where('lectura_id', $valor['key'])
-//                            ->where('estadoMedicion',  '!=', 'CANCELLED')
-//                            ->orderBy('created_at', 'desc')
-//                            ->get()
-//                            ->fisrt();
-//
-//                        $readingToFind = Lecturas::where('idLectura', $valor['key'])->select('fechaMedicion')->get()->first();
-//
-//                        if ( ($readingToFind->fechaMedicion >= $initialDateDiscount) && ($readingToFind->fechaMedicion <= $finalDateDiscount) )
-//                        {
-//                            $counterDiscount++;
-//                            $discount = true;
-//                        }
-//                        else
-//                        {
-//                            $discount = false;
-//                        }
-//
-//                        $requestHistoryCancellation = new HistorialCancelacion();
-//                        $requestHistoryCancellation->lectura_id = $valor['key'];
-//                        $requestHistoryCancellation->cancelacion_id = $cancellationCurrent->idCancelacion;
-//                        $requestHistoryCancellation->diferenciaMedida = $historyPendingValid->diferenciaMedida;
-//                        $requestHistoryCancellation->precioUnidad = $configCancellations->montoCuboAgua;
-//                        $requestHistoryCancellation->subTotal = ($requestHistoryCancellation->diferenciaMedida * $requestHistoryCancellation->precioUnidad);
-//                        $requestHistoryCancellation->montoCancelado = $valor['monto'];
-//                        $requestHistoryCancellation->estadoMedicion = ($requestHistoryCancellation->montoCancelado < $requestHistoryCancellation->subTotal) ? ( ($discount && (($requestHistoryCancellation->subTotal * ((int) '0.'.$percentage)) == $requestHistoryCancellation->montoCancelado )) ? 'COMPLETED' : 'IN_PROCESS' ) : 'COMPLETED';
-//                        $requestHistoryCancellation->save();
-//
-//                        if ($valor['multa'] > 0)
-//                        {
-//                            $requestHistoryCancellation = new HistorialCancelacion();
-//                            $requestHistoryCancellation->lectura_id = $valor['key'];
-//                            $requestHistoryCancellation->cancelacion_id = $cancellationCurrent->idCancelacion;
-//                            $requestHistoryCancellation->diferenciaMedida = 0;
-//                            $requestHistoryCancellation->precioUnidad = 0;
-//                            $requestHistoryCancellation->subTotal = $valor['multa'];
-//                            $requestHistoryCancellation->montoCancelado = $valor['multa'];
-//                            $requestHistoryCancellation->estadoMedicion = 'COMPLETED';
-//                            $requestHistoryCancellation->save();
-//                        }
-//
-//                    }
-//
-//                    if ($counterDiscount > 0)
-//                    {
-//                        $requestCancellation->descuento = true;
-//                        $requestCancellation->update();
-//                    }
-//                }
-//            }
         }
         else
         {
@@ -168,5 +175,75 @@ class CancellationController extends Controller
                 'message' => 'Credenciales insuficientes.',
             ], 401);
         }
+    }
+
+    public function printCancellation(Request $request)
+    {
+        $validator = Validator::make(
+            Cancelacion::inputRulesPrint($request->input('codigo')),
+            Cancelacion::rulesPrint()
+        );
+        $errors = $validator->errors();
+        if ($validator->fails())
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Formato incorrecto.',
+                'errors' => $errors->messages(),
+            ], 400);
+        }
+        $cancellation = new Cancelacion();
+        $cancellation->keyCancelacion = $request->input('codigo');
+        return response()->json([
+            'success' => true,
+            'message' => 'Reimpresión realizada correctamente .',
+            'data' => [
+                'cancel_data' => $cancellation->getDataCancellation(),
+                'months' => Cancelacion::mountAndFineDataBindingHistoryForCancellation($cancellation->keyCancelacion),
+                'partner'=> $cancellation->getDataPartnerReadingToCancellation()
+            ]
+        ], 200);
+    }
+
+    public function exchangeRate()
+    {
+        $user = Auth::user();
+        if ($user->tipoUsuario_id == 1)
+        {
+            $changesCoins = new \stdClass();
+            $changesCoins->BOLIVIANOS = Cancelacion::changeCoinAPI('https://api.cambio.today/v1/full/BOB/json?key=4234|S^9b_2vNDkPjc~eR1Dr^4q3Y2fZfJxAA', 'USD', 'EUR', 'DOLARES', 'EUROS');
+            $changesCoins->EUROS = Cancelacion::changeCoinAPI('https://api.cambio.today/v1/full/EUR/json?key=4234|S^9b_2vNDkPjc~eR1Dr^4q3Y2fZfJxAA', 'USD', 'BOB', 'DOLARES', 'BOLIVIANOS');
+            $changesCoins->DOLARES = Cancelacion::changeCoinAPI('https://api.cambio.today/v1/full/USD/json?key=4234|S^9b_2vNDkPjc~eR1Dr^4q3Y2fZfJxAA', 'BOB', 'EUR', 'BOLIVIANOS', 'EUROS');;
+            return response()->json($changesCoins);
+        }
+        else
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Credenciales insuficientes.',
+            ], 401);
+        }
+    }
+
+    public function history()
+    {
+        $user = Auth::user();
+        if ($user->tipoUsuario_id == 1)
+        {
+            return Cancelacion::where('descartado', 0)->orderBy('idCancelacion', 'desc')->limit(50)->select(
+                'idCancelacion',
+                'montoCancelacion as mount',
+                'fechaCancelacion as date',
+                'keyCancelacion as code',
+                'descuento as discount',
+                'moneda as coin',
+                'tipoCancelacion as typeCancellation'
+            )->with(['historyCancellation', 'historyAssists', 'historyProBackground', 'historyProTransfers'])->get();
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
     }
 }

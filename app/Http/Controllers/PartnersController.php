@@ -25,14 +25,14 @@ class PartnersController extends Controller
             {
                 $name = Persona::where('ci', $value['ci'])->selectRaw('concat_ws(" ", pNombre, sNombre, apellidoP, apellidoM) as fullName, concat_ws(" ", pNombre, apellidoP) as shortName')->get()->first();
                 $username = Persona::where('ci', $value['ci'])->get()->first()->user()->select('name', 'icoType')->get()->first();
-                array_push($partners, [
+                $partners[] = [
                     'fullName' => $name->fullName,
                     'shortName' => $name->shortName,
                     'uid' => $username->name,
                     'ico' => $username->icoType,
                     'gauges' => $value['cantidadMedidores'],
                     'gaugesProps' => Persona::where('ci', $value['ci'])->get()->first()->user()->get()->first()->gauges()->select('ordenMedidor as orden', 'numeroMedidor as numero')->get()
-                ]);
+                ];
             }
             return $partners;
         }
@@ -53,18 +53,28 @@ class PartnersController extends Controller
             $arrayToReadingsForGauge = [];
             try
             {
-                $gauges = User::where('name', urldecode($uid))->get()->first()->gauges()->get();
+                $arrayToReadingsForGauge[] = User::personGet_userGetForName(User::userGetForName($uid));
+                $gauges = User::gaugesGet_userGetForName(User::userGetForName($uid));
                 foreach ($gauges as $gauge)
                 {
-                    $readings = $gauge->readings()->orderBy('fechaMedicion')->get();
+                    $readings = $gauge->readings()->reorder('fechaMedicion', 'asc')->get();
                     $arrayToReadings = [];
                     foreach ($readings as $reading)
                     {
-                            $histories = $reading->historyAll()->orderBy('estadoMedicion')->orderBy('fechaHoraHCancelacion')->get();
+                        $histories = $reading->historyAll()->orderBy('fechaHoraHCancelacion')->get();
                         $arrayToHistories = [];
                         foreach ($histories as $history)
                         {
-                            $index_to_cancellation = $history->cancellation()->get();
+                            $index_to_cancellation = $history->cancellation()
+                                ->select(
+                                    'keyCancelacion as codigo',
+                                    'montoCancelacion as monto',
+                                    'moneda',
+                                    'fechaCancelacion as fecha',
+                                    'descartado',
+                                    'descuento'
+                                )
+                                ->get()->first();
                             $history_and_cancellation = [
                                 'idHistorialCancelaciones' => $history->idHistorialCancelaciones,
                                 'lectura_id' => $history->lectura_id,
@@ -77,7 +87,7 @@ class PartnersController extends Controller
                                 'estadoMedicion' => $history->estadoMedicion,
                                 'data_cancellation' => $index_to_cancellation
                             ];
-                            array_push($arrayToHistories, $history_and_cancellation);
+                            $arrayToHistories[] = $history_and_cancellation;
                         }
                         $reading_to_histories = [
                             "idLectura" =>  $reading->idLectura,
@@ -88,7 +98,7 @@ class PartnersController extends Controller
                             "estado" =>  $reading->estado,
                             "historialLectura" => $arrayToHistories
                         ];
-                        array_push($arrayToReadings, $reading_to_histories);
+                        $arrayToReadings[] = $reading_to_histories;
                     }
                     $gauges_to_reading = [
                         'idMedidor' => $gauge->idMedidor,
@@ -100,7 +110,7 @@ class PartnersController extends Controller
                         'estado' => $gauge->estado,
                         'lecturas' => $arrayToReadings
                     ];
-                    array_push($arrayToReadingsForGauge, $gauges_to_reading);
+                    $arrayToReadingsForGauge[] = $gauges_to_reading;
                 }
                 return $arrayToReadingsForGauge;
             }
@@ -111,8 +121,6 @@ class PartnersController extends Controller
                     'message' => 'Error de solicitud',
                 ], 400);
             }
-
-
         }
         else
         {

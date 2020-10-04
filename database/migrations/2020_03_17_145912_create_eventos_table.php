@@ -21,6 +21,7 @@ class CreateEventosTable extends Migration
             $table->integer('usuario_id')->unsigned();
             $table->string('nombreEvento', 80);
             $table->string('descripcionEvento', 150);
+            $table->float('montoMulta', 6, 2)->unsigned();
             $table->boolean('finalizado')->default(false);
             $table->dateTime('fechaEvento');
             $table->foreign('usuario_id')

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class LecturaController extends Controller
 {
-    public function getPreviousReading()
+public function getPreviousReading()
     {
         $user = Auth::user();
         if ($user->tipoUsuario_id == 1)
@@ -39,12 +39,9 @@ class LecturaController extends Controller
                                 'fechaMedicion',
                                 'estado'
                             )
-//                            ->whereYear('fechaMedicion', date('Y'))
-//                            ->whereMonth('fechaMedicion', date('m'))
-                            ->orderByDesc('fechaMedicion')
                             ->first()
                     ];
-                    array_push($medidorsResponse, $m_n);
+                    $medidorsResponse[] = $m_n;
                 }
                 $user_n = (object) [
                     'tipo_usuario' => $u->tipo()->select(
@@ -63,17 +60,14 @@ class LecturaController extends Controller
                         )->get()->first(),
                     'medidores' => $medidorsResponse
                 ];
-                array_push($userResponse, $user_n);
+                $userResponse[] = $user_n;
             }
             return $userResponse;
         }
-        else
-        {
-            return response()->json([
-                'success' => false,
-                'message' => 'Credenciales insuficientes.',
-            ], 401);
-        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
     }
 
     public function setCurrentReadings(Request $request)
@@ -151,7 +145,7 @@ class LecturaController extends Controller
                     }
                 }
             }
-            if ($error == true)
+            if ($error === true)
             {
                 return response()->json([
                     'success' => false,
@@ -159,99 +153,103 @@ class LecturaController extends Controller
                     'errors' => $validator->errors()->messages(),
                 ], 400);
             }
-            else
+
+            $prevReading =  Lecturas::select('fechaMedicion')->orderBy('fechaMedicion', 'DESC')->get()->first();
+            $date_current = Carbon::parse($prevReading->fechaMedicion);
+            $date_current->setMonth($date_current->month + 1);
+
+            $reading_for_month_exists = Lecturas::whereYear('fechaMedicion', $date_current->year)->whereMonth('fechaMedicion', $date_current->month)->get()->first();
+
+            if ($reading_for_month_exists)
             {
-                $date_current = now();
-                $date_current->setMonth($date_current->month - 1);
-
-                $reading_for_month_exists = Lecturas::whereYear('fechaMedicion', $date_current->year)
-                    ->whereMonth('fechaMedicion', $date_current->month)
-                    ->whereDay('fechaMedicion', $date_current->day)
-                    ->get()
-                    ->first();
-
-                if ($reading_for_month_exists)
-                {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'La lectura del mes anterior, ya ha sido registrada.',
-                    ], 400);
-                }
-                else
-                {
-                    foreach ($request->json() as $clave => $valor)
-                    {
-                        $data_lectura = Lecturas::join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
-                            ->join('users', 'medidors.usuario_id', '=', 'users.idUsuario')
-                            ->where('lecturas.idLectura', '=', (int) $valor['key_lectura'])
-                            ->select(
-                                'lecturas.medidor_id',
-                                'lecturas.medida',
-                                'users.name'
-                            )
-                            ->get()
-                            ->first();
-
-                        $newLectura = new Lecturas();
-                        $newLectura->medidor_id = $data_lectura->medidor_id;
-                        $newLectura->usuario_id = $user->idUsuario;
-                        $newLectura->medida = $valor['medida'];
-                        $newLectura->fechaMedicion = $date_current;
-                        $newLectura->estado = 'NORMAL';
-                        $newLectura->save();
-
-                        $lectura_for_history = Lecturas::select('idLectura as ID')
-                            ->where('medidor_id', '=', $data_lectura->medidor_id)
-                            ->whereYear('fechaMedicion', $date_current->year)
-                            ->whereMonth('fechaMedicion', $date_current->month)
-                            ->whereDay('fechaMedicion', $date_current->day)
-                            ->orderBy('idLectura', 'desc')
-                            ->get()
-                            ->first();
-
-                        $config_cancelations = ConfiguracionCancelacion::where('activo', '=', true)->get()->first();
-
-                        $newHistorialCancelacions = new HistorialCancelacion();
-                        $newHistorialCancelacions->lectura_id = $lectura_for_history->ID;
-                        $newHistorialCancelacions->cancelacion_id = null;
-                        $newHistorialCancelacions->diferenciaMedida = (int) $valor['medida'] - (int) $data_lectura->medida;
-                        $newHistorialCancelacions->precioUnidad = $config_cancelations->montoCuboAgua;
-                        $newHistorialCancelacions->subTotal = $newHistorialCancelacions->diferenciaMedida * $newHistorialCancelacions->precioUnidad;
-                        $newHistorialCancelacions->save();
-
-                        $count_month_pending = HistorialCancelacion::select('historial_cancelacions.idHistorialCancelaciones', 'lecturas.fechaMedicion', 'lecturas.medida')
-                            ->join('lecturas', 'historial_cancelacions.lectura_id', '=', 'lecturas.idLectura')
-                            ->join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
-                            ->where('lecturas.medidor_id', '=',  $data_lectura->medidor_id)
-                            ->where('historial_cancelacions.estadoMedicion', '=', 'PENDING')
-                                ->where('historial_cancelacions.diferenciaMedida', '!=', 0)
-                            ->where('historial_cancelacions.precioUnidad', '!=', 0)
-                            ->where('medidors.estado', '=', 'ACTIVO')
-                            ->orderBy('fechaHoraHCancelacion', 'desc')
-                            ->get();
-
-                        if(count($count_month_pending) % (int) $config_cancelations->cantidadMesesParaMulta == 0) {
-                            $newHistorialCancelacionsMulta = new HistorialCancelacion();
-                            $newHistorialCancelacionsMulta->lectura_id = $lectura_for_history->ID;
-                            $newHistorialCancelacionsMulta->cancelacion_id = null;
-                            $newHistorialCancelacionsMulta->diferenciaMedida = 0;
-                            $newHistorialCancelacionsMulta->precioUnidad = 0;
-                            $newHistorialCancelacionsMulta->subTotal = $config_cancelations->montoMultaConsumoAgua;
-                            $newHistorialCancelacionsMulta->save();
-                        }
-                    }
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Lectura registrada correctamente.',
-                    ], 201);
-                }
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La lectura del mes anterior, ya ha sido registrada.',
+                ], 400);
             }
-        } else {
+
+            $limitDate = now();
+            if ($date_current->year === $limitDate->year && $date_current->month <= $limitDate->month)
+            {
+                foreach ($request->json() as $clave => $valor)
+                {
+                    $data_lectura = Lecturas::join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
+                        ->join('users', 'medidors.usuario_id', '=', 'users.idUsuario')
+                        ->where('lecturas.idLectura', '=', (int) $valor['key_lectura'])
+                        ->select(
+                            'lecturas.medidor_id',
+                            'lecturas.medida',
+                            'users.name'
+                        )
+                        ->get()
+                        ->first();
+
+                    $newLectura = new Lecturas();
+                    $newLectura->medidor_id = $data_lectura->medidor_id;
+                    $newLectura->usuario_id = $user->idUsuario;
+                    $newLectura->medida = $valor['medida'];
+                    $newLectura->fechaMedicion = $date_current;
+                    $newLectura->estado = 'NORMAL';
+                    $newLectura->save();
+
+                    $lectura_for_history = Lecturas::select('idLectura as ID')
+                        ->where('medidor_id', '=', $data_lectura->medidor_id)
+                        ->whereYear('fechaMedicion', $date_current->year)
+                        ->whereMonth('fechaMedicion', $date_current->month)
+                        ->whereDay('fechaMedicion', $date_current->day)
+                        ->orderBy('idLectura', 'desc')
+                        ->get()
+                        ->first();
+
+                    $config_cancelations = ConfiguracionCancelacion::where('activo', '=', true)->get()->first();
+
+                    $newHistorialCancelacions = new HistorialCancelacion();
+                    $newHistorialCancelacions->lectura_id = $lectura_for_history->ID;
+                    $newHistorialCancelacions->cancelacion_id = null;
+                    $newHistorialCancelacions->diferenciaMedida = (int) $valor['medida'] - (int) $data_lectura->medida;
+                    $newHistorialCancelacions->precioUnidad = $config_cancelations->montoCuboAgua;
+                    $newHistorialCancelacions->subTotal = $newHistorialCancelacions->diferenciaMedida * $newHistorialCancelacions->precioUnidad;
+                    $newHistorialCancelacions->fechaHoraHCancelacion = now();
+                    $newHistorialCancelacions->save();
+
+                    $count_month_pending = HistorialCancelacion::select('historial_cancelacions.idHistorialCancelaciones', 'lecturas.fechaMedicion', 'lecturas.medida')
+                        ->join('lecturas', 'historial_cancelacions.lectura_id', '=', 'lecturas.idLectura')
+                        ->join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
+                        ->where('lecturas.medidor_id', '=',  $data_lectura->medidor_id)
+                        ->where('historial_cancelacions.estadoMedicion', '=', 'PENDING')
+                        ->where('historial_cancelacions.diferenciaMedida', '!=', 0)
+                        ->where('historial_cancelacions.precioUnidad', '!=', 0)
+                        ->where('medidors.estado', '=', 'ACTIVO')
+                        ->orderBy('fechaHoraHCancelacion', 'desc')
+                        ->get();
+
+                    if(count($count_month_pending) % (int) $config_cancelations->cantidadMesesParaMulta === 0) {
+                        $newHistorialCancelacionsMulta = new HistorialCancelacion();
+                        $newHistorialCancelacionsMulta->lectura_id = $lectura_for_history->ID;
+                        $newHistorialCancelacionsMulta->cancelacion_id = null;
+                        $newHistorialCancelacionsMulta->diferenciaMedida = 0;
+                        $newHistorialCancelacionsMulta->precioUnidad = 0;
+                        $newHistorialCancelacionsMulta->subTotal = $config_cancelations->montoMultaConsumoAgua;
+                        $newHistorialCancelacionsMulta->fechaHoraHCancelacion = now();
+                        $newHistorialCancelacionsMulta->save();
+                    }
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Lectura registrada correctamente.',
+                ], 201);
+            }
+
             return response()->json([
-                'success' => false,
-                'message' => 'Credenciales insuficientes.',
-            ], 401);
+                'success' => true,
+                'message' => 'No se puede realizar el registro del mes siguiente',
+            ], 400);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
     }
 
 }

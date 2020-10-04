@@ -21,6 +21,7 @@ class CreateAsistenciasTable extends Migration
             $table->integer('medidor_id')->unsigned();
             $table->integer('evento_id')->unsigned();
             $table->boolean('asistio');
+            $table->integer('cancelacion_id')->nullable()->unsigned();
             $table->dateTime('fechaHoraAsistencia')->default(now())->nullable();
             $table->foreign('medidor_id')
                 ->references('idMedidor')
@@ -29,6 +30,10 @@ class CreateAsistenciasTable extends Migration
             $table->foreign('evento_id')
                 ->references('idEvento')
                 ->on('eventos')
+                ->onDelete('cascade');
+            $table->foreign('cancelacion_id')
+                ->references('idCancelacion')
+                ->on('cancelacions')
                 ->onDelete('cascade');
             $table->timestamps();
         });

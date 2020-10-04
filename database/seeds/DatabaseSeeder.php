@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
             LecturasTableSeeder::class,
             CancelacionsTableSeeder::class,
             HistorialTransferenciasTableSeeder::class,
-            HistorialCancelacionsTableSeeder::class
+            HistorialCancelacionsTableSeeder::class,
+            EventosTableSeeder::class,
+            AsistenciasTableSeeder::class
         ));
     }
 }
