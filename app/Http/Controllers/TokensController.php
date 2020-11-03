@@ -29,30 +29,29 @@ class TokensController extends Controller
                 'message' => 'Los campos no cumplen los requisitos mínimos.',
                 'errors' => $validator->errors(),
             ], 422);
-        } else {
-            $credentials = [
-                'name' => $credentials['user'],
-                'password' => $credentials['pass'],
-            ];
-            $token = JWTAuth::attempt($credentials);
-            if ($token) {
-                return response()->json([
-                    'success' => true,
-                    'token' => $token,
-                    'user' => User::select('idUsuario', 'tipoUsuario_id', 'persona_id', 'name', 'email', 'icoType')
-                        ->where('name', $credentials['name'])
-                        ->orWhere('email', $credentials['name'])
-                        ->get()
-                        ->first()
-                ],200);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Las credenciales son incorrectas.',
-                    'errors' => $validator->errors(),
-                ], 401);
-            }
         }
+        $credentials = [
+            'name' => $credentials['user'],
+            'password' => $credentials['pass'],
+        ];
+        $token = JWTAuth::attempt($credentials);
+        if ($token)
+        {
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+                'user' => User::select('idUsuario', 'tipoUsuario_id', 'persona_id', 'name', 'email', 'icoType')
+                    ->where('name', $credentials['name'])
+                    ->orWhere('email', $credentials['name'])
+                    ->get()
+                    ->first()
+            ],200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Las credenciales son incorrectas.',
+            'errors' => $validator->errors(),
+        ], 401);
     }
 
     public function refresh()

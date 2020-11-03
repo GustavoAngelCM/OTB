@@ -9,10 +9,13 @@ use App\User;
 use App\Lecturas;
 use App\Cancelacion;
 use App\HistorialTransferencia;
+use Carbon\Carbon;
+use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -42,116 +45,159 @@ class UserController extends Controller
                 'message' => 'Formato incorrecto.',
                 'errors' => $errors->messages(),
             ], 400);
-        } else {
-            $validator = null;
-            $error = false;
-            foreach ($request->input('medidores') as $clave => $valor) {
+        }
+        $validator = null;
+        $error = false;
+        foreach ($request->input('medidores') as $clave => $valor) {
+            try {
                 $key = Uuid::generate()->string;
-                array_push($transaction_keys, $key);
-                $validator = Validator::make(
-                    Medidor::inputRulesGauges($valor),
-                    Medidor::rulesGauges()
-                );
-                if ($validator->fails()) {
-                    $error = true;
-                    break;
-                } else {
-                    $validator = null;
-                    $error = false;
-
-                    $validator = Validator::make(
-                        Cancelacion::inputRulesGaugeTransaction($valor['compra'], $key),
-                        Cancelacion::rulesGaugeTransaction()
-                    );
-                    if ($validator->fails()) {
-                        $error = true;
-                        break;
-                    }
-                }
-            }
-            if ($error == true) {
+            } catch (\Exception $e) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Formato incorrecto.',
-                    'errors' => $validator->errors()->messages(),
+                    'message' => 'Error al registrar.',
+                    'errors' => 'token',
                 ], 400);
-            } else {
-                foreach ($request->input('telefonos') as $valor) {
-                    $validator = Validator::make(
-                        Telefono::inputRulesPhone($valor),
-                        Telefono::rulesPhone()
-                    );
-                    if ($validator->fails()) {
-                        $error = true;
-                        break;
-                    }
-                }
-                if ($error == true) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Formato incorrecto.',
-                        'errors' => $validator->errors()->messages(),
-                    ], 400);
-                } else {
-                    $personaRequest = new Persona();
-                    $personaRequest->preparingSaving($request->input('nombres'), $request->input('apellidos'), $request->input('ci'), $request->input('fechaNacimiento'), $request->input('sexo'));
+            }
+            $transaction_keys[] = $key;
+            $validator = Validator::make(
+                Medidor::inputRulesGauges($valor),
+                Medidor::rulesGauges()
+            );
+            if ($validator->fails()) {
+                $error = true;
+                break;
+            }
 
-                    $personGET = Persona::getData($personaRequest->ci);
+            $validator = null;
+            $error = false;
 
-                    foreach ($request->input('telefonos') as $valor) {
-                        $telefonoRequest = new Telefono();
-                        $telefonoRequest->preparingSaving($personGET->idPersona, $valor);
-                    }
-
-                    $usuarioRequest = new User();
-                    $usuarioRequest->preparingSaving($request->input('tipo'), $personGET, $request->input('email'), $request->input('ico'));
-
-                    $userGET = User::getDataUsingCI($personGET->idPersona);
-
-                    $c_key = 0;
-                    foreach ($request->input('medidores') as $clave => $valor) {
-                        $medidoresRequest =  new Medidor();
-                        $medidoresRequest->preparingSaving($userGET->idUsuario, $valor['orden'], $valor['numero'], $valor['direccion'], $valor['fechaInstalacion'], $valor['estado']);
-
-                        $medidorGET = Medidor::getDataUsingNumber($valor['numero']);
-
-                        $user_auth = Auth::user();
-
-                        $lecturaRequest = new Lecturas();
-                        $lecturaRequest->preparingSaving($medidorGET->idMedidor, $user_auth->idUsuario, $valor['lectura'], ((isset($valor['fechaMedicion'])) ? $valor['fechaMedicion'] : null ));
-
-                        $cancelacionRequest = new Cancelacion();
-                        $cancelacionRequest->preparingSaving($valor['compra']['precio'], $transaction_keys[$c_key], $valor['compra']['moneda'], $valor['compra']['tipo']);
-
-                        $cancelacion_GET = Cancelacion::getIDCancellation($transaction_keys[$c_key]);
-
-                        $transferenciaRequest = new HistorialTransferencia();
-                        $transferenciaRequest->preparingSaving($userGET->idUsuario, $medidorGET->idMedidor, $cancelacion_GET->idCancelacion, $valor['compra']['saldo'], $valor['compra']['precio']);
-                        $c_key ++;
-                    }
-
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Registro creado exitosamente.',
-                        'errors' => null,
-                    ], 201);
-                }
+            $validator = Validator::make(
+                Cancelacion::inputRulesGaugeTransaction($valor['compra'], $key),
+                Cancelacion::rulesGaugeTransaction()
+            );
+            if ($validator->fails()) {
+                $error = true;
+                break;
             }
         }
+        if ($error === true) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Formato incorrecto.',
+                'errors' => $validator->errors()->messages(),
+            ], 400);
+        }
+
+        foreach ($request->input('telefonos') as $valor) {
+            $validator = Validator::make(
+                Telefono::inputRulesPhone($valor),
+                Telefono::rulesPhone()
+            );
+            if ($validator->fails()) {
+                $error = true;
+                break;
+            }
+        }
+        if ($error === true) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Formato incorrecto.',
+                'errors' => $validator->errors()->messages(),
+            ], 400);
+        }
+
+        $personaRequest = new Persona();
+        $personaRequest->preparingSaving($request->input('nombres'), $request->input('apellidos'), $request->input('ci'), $request->input('fechaNacimiento'), $request->input('sexo'));
+
+        $personGET = Persona::getData($personaRequest->ci);
+
+        foreach ($request->input('telefonos') as $valor) {
+            $telefonoRequest = new Telefono();
+            $telefonoRequest->preparingSaving($personGET->idPersona, $valor);
+        }
+
+        $usuarioRequest = new User();
+        $usuarioRequest->preparingSaving($request->input('tipo'), $personGET, $request->input('email'), $request->input('ico'));
+
+        $userGET = User::getDataUsingCI($personGET->idPersona);
+
+        $c_key = 0;
+        foreach ($request->input('medidores') as $clave => $valor)
+        {
+            $medidoresRequest =  new Medidor();
+            $medidoresRequest->preparingSaving($userGET->idUsuario, $valor['numero'], $valor['direccion'], $valor['fechaInstalacion'], $valor['estado']);
+
+            $medidorGET = Medidor::getDataUsingNumber($valor['numero']);
+
+            $user_auth = Auth::user();
+
+            $lecturaRequest = new Lecturas();
+            $lecturaRequest->preparingSaving($medidorGET->idMedidor, $user_auth->idUsuario, $valor['lectura'], ($valor['fechaNivelacion'] ?? null));
+
+            $ultimateRegisterReading = Lecturas::select("fechaMedicion")->groupBy('fechaMedicion')->orderBy('fechaMedicion', 'desc')->first();
+            $dateLimit = Carbon::parse($ultimateRegisterReading->fechaMedicion);
+            $dateLimit->setDay(1);
+            $dateFlag = Carbon::parse($valor['fechaNivelacion']);
+            $dateFlag->setDay(1);
+            $gaugeReading = $valor['lectura'];
+            while ($dateLimit > $dateFlag)
+            {
+                $gaugeReading += 10;
+                $dateFlag->setMonth($dateFlag->month + 1);
+                $lecturaRequest = new Lecturas();
+                $lecturaRequest->preparingSaving($medidorGET->idMedidor, $user_auth->idUsuario, $gaugeReading, $dateFlag);
+            }
+
+            $cancelacionRequest = new Cancelacion();
+            $cancelacionRequest->prepareSaving($valor['compra']['precio'], $transaction_keys[$c_key], $valor['compra']['moneda'], $valor['compra']['tipo']);
+
+            $cancelacion_GET = Cancelacion::getIDCancellation($transaction_keys[$c_key]);
+
+            $transferenciaRequest = new HistorialTransferencia();
+            $transferenciaRequest->preparingSaving($userGET->idUsuario, $medidorGET->idMedidor, $cancelacion_GET->idCancelacion, $valor['compra']['precio']);
+            $c_key ++;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Registro creado exitosamente.',
+            'errors' => null,
+        ], 201);
     }
 
-    public function managers()
+    public function managers(): array
     {
         $usersManagers = User::getUsersManagers();
         $managers = [];
         foreach ($usersManagers as $userManager) {
-            array_push($managers, [
-                "fullName" => "{$userManager->person->fullName()}",
-                "shortName" => "{$userManager->person->shortName()}",
+            $managers[] = [
+                "fullName" => (string)($userManager->person->fullName()),
+                "shortName" => (string)($userManager->person->shortName()),
                 "ico" => $userManager->icoType
-            ]);
+            ];
         }
         return $managers;
+    }
+
+    public function updatePass($uid)
+    {
+        $user = Auth::user();
+        if ($user->tipoUsuario_id === 1)
+        {
+            $faker = Factory::create();
+            $secret =$faker->password;
+            $userSelected = User::uid($uid)->first();
+            $userSelected->password = Hash::make($secret);
+            $userSelected->save();
+            return response()->json([
+                'success' => true,
+                'secret' => $secret,
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
     }
 
 }

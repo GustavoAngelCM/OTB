@@ -20,7 +20,7 @@ class ConfiguracionCancelacionSeeder extends Seeder
                 'montoMultaConsumoAgua' => 30.00,
                 'montoTransferenciaAccion' => 250.00,
                 'montoMinimoCancelacion' => 10.00,
-                'descuentoCobroAgua' => 'DESCUENTO POR SARS-COV-2=>2020-02-01 00:00:00=>2020-07-31 00:00:00=>0',
+                'descuentoCobroAgua' => 'DESCUENTO POR SARS-COV-2=>2020-02-01 00:00:00=>2020-10-31 00:00:00=>0',
                 'cantidadMesesParaMulta' => 3,
                 'fechaActualizacion' => now(),
                 'activo' =>  true,

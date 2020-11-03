@@ -5,6 +5,43 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
+/**
+ * App\Cancelacion
+ *
+ * @property int $idCancelacion
+ * @property float $montoCancelacion
+ * @property string $fechaCancelacion
+ * @property string $keyCancelacion
+ * @property int $descartado
+ * @property int $descuento
+ * @property string $moneda
+ * @property string $tipoCancelacion
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Asistencia[] $historyAssists
+ * @property-read int|null $history_assists_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\HistorialCancelacion[] $historyCancellation
+ * @property-read int|null $history_cancellation_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\HistorialProFondo[] $historyProBackground
+ * @property-read int|null $history_pro_background_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\HistorialTransferencia[] $historyProTransfers
+ * @property-read int|null $history_pro_transfers_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereDescartado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereDescuento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereFechaCancelacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereIdCancelacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereKeyCancelacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereMoneda($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereMontoCancelacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereTipoCancelacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion cancelTransaction($key)
+ * @mixin \Eloquent
+ */
 class Cancelacion extends Model
 {
     protected  $primaryKey = 'idCancelacion';
@@ -72,8 +109,8 @@ class Cancelacion extends Model
 
     public function getDataCancellation($key = null)
     {
-        return Cancelacion::where('keyCancelacion', '=', ($key) ? $key: $this->keyCancelacion)
-            ->select(
+        return self::where('keyCancelacion', '=', ($key) ?: $this->keyCancelacion)
+            ->select([
                 'idCancelacion as numero',
                 'descartado',
                 'descuento',
@@ -82,27 +119,27 @@ class Cancelacion extends Model
                 'moneda',
                 'montoCancelacion as monto',
                 'tipoCancelacion as tipo'
-            )
+            ])
             ->get()->first();
     }
 
     public static function getIDCancellation($key)
     {
-        return Cancelacion::where('keyCancelacion', '=', $key)
+        return self::where('keyCancelacion', '=', $key)
             ->select(
                 'idCancelacion'
             )
             ->get()->first();
     }
 
-    public static function rulesPrint()
+    public static function rulesPrint(): array
     {
         return [
             'keyCancelacion' => 'bail|required|exists:cancelacions'
         ];
     }
 
-    public static function rulesCancellation()
+    public static function rulesCancellation(): array
     {
         return [
             'cancellations' => 'bail|required',
@@ -121,12 +158,12 @@ class Cancelacion extends Model
         ];
     }
 
-    public function prepareSaving($total, $key, $moneda, $tipo): void
+    public function prepareSaving($total, $key, $coin, $type): void
     {
         $this->montoCancelacion = $total;
         $this->keyCancelacion = $key;
-        $this->moneda = strtoupper($moneda);
-        $this->tipoCancelacion = strtoupper($tipo);
+        $this->moneda = strtoupper($coin);
+        $this->tipoCancelacion = strtoupper($type);
         $this->fechaCancelacion = now();
         $this->save();
     }
@@ -257,7 +294,7 @@ class Cancelacion extends Model
             ($difference * $mountCube);
     }
 
-    public static function changeCoinAPI($url, $to, $to_2, $name, $name_2)
+    public static function changeCoinAPI($url, $to, $to_2, $name, $name_2): array
     {
         $changeCoinRequestBOB = Http::get($url);
         $listChangeCoinBO = array();
@@ -300,6 +337,11 @@ class Cancelacion extends Model
             case "EUROS": return "EUR";
             default: return "UNKNOWN";
         }
+    }
+
+    public function scopeCancelTransaction($query, $key)
+    {
+        return $query->where('keyCancelacion',  $key)->update(['descartado' => 1]);
     }
 
 }

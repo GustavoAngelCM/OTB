@@ -16,7 +16,7 @@ class PersonController extends Controller
     public function modifyingData(Request $request, $id)
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $id = (int) $id;
             $validator = Validator::make(
@@ -76,7 +76,7 @@ class PersonController extends Controller
     public function deleteData($id)
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $id = (int) $id;
             $validator = Validator::make(
@@ -112,13 +112,10 @@ class PersonController extends Controller
                 'message' => 'Dependia existente, imposible eliminar.',
             ], 400);
         }
-        else
-        {
-            return response()->json([
-                'success' => false,
-                'message' => 'Credenciales insuficientes.',
-            ], 401);
-        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
     }
 
     public function gaugesHistoryCancellation($uid): array

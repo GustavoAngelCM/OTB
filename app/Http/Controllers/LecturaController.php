@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ConfiguracionCancelacion;
 use App\HistorialCancelacion;
+use App\Medidor;
 use App\User;
 use App\Lecturas;
 use Carbon\Carbon;
@@ -11,13 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use function PHPUnit\Framework\isNull;
 
 class LecturaController extends Controller
 {
-public function getPreviousReading()
+    public function getPreviousReading()
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $users = User::where('tipoUsuario_id', '!=', 1)->get();
             $userResponse = [];
@@ -73,7 +75,7 @@ public function getPreviousReading()
     public function setCurrentReadings(Request $request)
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $validator = null;
             $error = false;
@@ -112,37 +114,24 @@ public function getPreviousReading()
                     $error = true;
                     break;
                 }
+
+                $responseConflict = Lecturas::join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
+                    ->join('users', 'medidors.usuario_id', '=', 'users.idUsuario')
+                    ->where('lecturas.idLectura', '=', (int) $valor['key_lectura'])
+                    ->select(
+                        'medidors.numeroMedidor',
+                        'users.name'
+                    )
+                    ->get()
+                    ->first();
+                if ($responseConflict->exists && ($responseConflict->numeroMedidor === $valor['numero']) &&
+                    ($responseConflict->name === $valor['UID'])) {
+                        $error = false;
+                    }
                 else
                 {
-                    $responseConflict = Lecturas::join('medidors', 'lecturas.medidor_id', '=', 'medidors.idMedidor')
-                        ->join('users', 'medidors.usuario_id', '=', 'users.idUsuario')
-                        ->where('lecturas.idLectura', '=', (int) $valor['key_lectura'])
-                        ->select(
-                            'medidors.numeroMedidor',
-                            'users.name'
-                        )
-                        ->get()
-                        ->first();
-                    if ($responseConflict->exists)
-                    {
-                        if (
-                            ($responseConflict->numeroMedidor == $valor['numero']) &&
-                            ($responseConflict->name == $valor['UID'])
-                        )
-                        {
-                            $error = false;
-                        }
-                        else
-                        {
-                            $error = true;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        $error = true;
-                        break;
-                    }
+                    $error = true;
+                    break;
                 }
             }
             if ($error === true)
@@ -250,6 +239,138 @@ public function getPreviousReading()
             'success' => false,
             'message' => 'Credenciales insuficientes.',
         ], 401);
+    }
+
+    public function updateReading(Request $request, $id)
+    {
+        $user = Auth::user();
+        $id = (int) $id;
+        if ($user->tipoUsuario_id === 1)
+        {
+            $validator = Validator::make(
+                [
+                    "medidaPrev" => $request->input('lastReading'),
+                    "medida" => $request->input('currentReading'),
+                    "idLectura" => $id
+                ],
+                [
+                    "medidaPrev" => "bail|required|numeric",
+                    "medida" => "bail|required|numeric",
+                    "idLectura" => "bail|required|numeric|exists:lecturas",
+                ]
+            );
+            $errors = $validator->errors();
+            if ($validator->fails())
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Formato incorrecto.',
+                    'errors' => $errors->messages(),
+                ], 400);
+            }
+            $readingPrevious = Lecturas::reading($id)->first();
+            if ($request->input('lastReading') === $readingPrevious->medida)
+            {
+                $historyCancellation = HistorialCancelacion::pendingValid($id);
+                $recalculateDifference = $request->input('currentReading') - ($readingPrevious->medida - $historyCancellation->diferenciaMedida);
+                $historyCancellation->diferenciaMedida = $recalculateDifference;
+                $historyCancellation->subTotal = $recalculateDifference * $historyCancellation->precioUnidad;
+                $historyCancellation->save();
+                $readingPrevious->medida = $request->input('currentReading');
+                $readingPrevious->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => "Registro actualizado correctamente",
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al verificar lectura',
+            ], 400);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
+    }
+
+    public function monthReading(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->tipoUsuario_id === 1)
+        {
+            $validator = Validator::make(
+                [
+                    "ordenMedidor" => $request->input('medidor'),
+                    "fechaMedicion" => $request->input('mes')
+                ],
+                [
+                    "ordenMedidor" => "bail|required|exists:medidors",
+                    "fechaMedicion" => "bail|required|date"
+                ]
+            );
+            $errors = $validator->errors();
+            if ($validator->fails())
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Formato incorrecto.',
+                    'errors' => $errors->messages(),
+                ], 400);
+            }
+            $monthSelected = Carbon::parse($request->input('mes'));
+            $readingForGauge = Medidor::join('lecturas', 'medidors.idMedidor', '=', 'lecturas.medidor_id')
+                ->where('medidors.ordenMedidor', $request->input('medidor'))
+                ->whereYear('lecturas.fechaMedicion', $monthSelected->year)
+                ->whereMonth('lecturas.fechaMedicion', $monthSelected->month)
+                ->select(['lecturas.medida', 'lecturas.idLectura'])
+                ->first();
+            if ($readingForGauge->exists())
+            {
+                $existCancellation = Lecturas::searchCancellationsToReading($readingForGauge->idLectura);
+                if (count($existCancellation) > 0)
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Esta lectura ya ha sido pagada.',
+                    ], 400);
+                }
+                return response()->json([
+                    'success' => true,
+                    'data' => $readingForGauge
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Lectura inexistente.',
+            ], 400);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
+    }
+
+    public function monthsReadings()
+    {
+        $listMonthsReadings = Lecturas::selectRaw("DISTINCT (DATE_FORMAT(fechaMedicion, '%Y %m')) as date")
+            ->groupBy('fechaMedicion')
+            ->orderBy('fechaMedicion')
+            ->get();
+        $monthsResponse = [];
+        Carbon::setLocale('es');
+        foreach ($listMonthsReadings as $date)
+        {
+            $parserCarbon = Carbon::parse(strtr($date->date, [' ' => '-']).'-01');
+            $monthsResponse [] = [
+                'parserDate' => strtoupper("{$parserCarbon->monthName} de {$parserCarbon->year}"),
+                'date' => $parserCarbon
+            ];
+        }
+        return response()->json([
+            'success' => true,
+            'data' => array_reverse($monthsResponse)
+        ], 200);
     }
 
 }

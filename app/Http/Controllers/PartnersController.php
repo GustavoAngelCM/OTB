@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Telefono;
 use App\User;
 use App\Persona;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PartnersController extends Controller
 {
     public function getPartners()
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $partners = [];
             $partnersDB = Persona::selectRaw('ci, count(medidors.numeroMedidor) as cantidadMedidores')
@@ -36,19 +39,102 @@ class PartnersController extends Controller
             }
             return $partners;
         }
-        else
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
+    }
+
+    public function updatePartner(Request $request, $uid)
+    {
+        $user = Auth::user();
+        if ($user->tipoUsuario_id === 1)
         {
-            return response()->json([
-                'success' => false,
-                'message' => 'Credenciales insuficientes.',
-            ], 401);
+            $validator = Validator::make(
+                Persona::inputRulesUpdate($request->input('tipo'), $request->input('nombres'), $request->input('apellidos'), explode(' ', $request->input('ci'))[0], $request->input('fechaNacimiento'), $request->input('sexo'), $request->input('email'), $request->input('ico'), $request->input('telefonos')),
+                Persona::rulesUpdate()
+            );
+            $errors = $validator->errors();
+            if ($validator->fails())
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Formato incorrecto.',
+                    'errors' => $errors->messages(),
+                ], 400);
+            }
+            $idUser = User::userGetForName($uid)->idUsuario;
+            $person = User::personGetForName($uid);
+            Persona::updatingFields($person->idPersona, $request->input());
+            User::updatingFields($idUser, $request->input());
+            $phones = $request->input('telefonos');
+            try
+            {
+                if ($phones !== null)
+                {
+                    $newNumber = new Telefono();
+                    if ( count($person->phones) > 0)
+                    {
+                        Telefono::where('persona_id', $person->idPersona)->delete();
+                        $newNumber->preparingSaving($person->idPersona, $request->input('telefonos'));
+                    }
+                    else
+                    {
+                        $newNumber->preparingSaving($person->idPersona, $request->input('telefonos'));
+                    }
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Registros actualizados correctamente.',
+                ], 200);
+            }
+            catch (\Exception $e)
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al actualizar datos del telefono.',
+                ], 400);
+            }
         }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
+    }
+
+    public function getPartner($uid)
+    {
+        $user = Auth::user();
+        if ($user->tipoUsuario_id === 1)
+        {
+            $userData = User::uid($uid)->with(['person', 'person.phones'])->first();
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    "names" => $userData->person->names(),
+                    "lastnames" => $userData->person->lastNames(),
+                    "birthdate" => $userData->person->fechaNacimiento,
+                    "ci" => $userData->person->ciExp(),
+                    "email" => $userData->email,
+                    "uid" => $userData->name,
+                    "phone" => (count($userData->person->phones) > 0) ? $userData->person->phones[0]->numeroTelefono : null,
+                    "sex" => $userData->person->sexo,
+                    "type" => $userData->tipoUsuario_id,
+                    "ico" => $userData->icoType
+                ],
+                'message' => 'Se completo correctamente',
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Credenciales insuficientes.',
+        ], 401);
     }
 
     public function getHistoryCancelled($uid)
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $arrayToReadingsForGauge = [];
             try
@@ -61,7 +147,7 @@ class PartnersController extends Controller
                     $arrayToReadings = [];
                     foreach ($readings as $reading)
                     {
-                        $histories = $reading->historyAll()->orderBy('fechaHoraHCancelacion')->get();
+                        $histories = $reading->historyAll()->orderBy('idHistorialCancelaciones')->orderBy('fechaHoraHCancelacion')->get();
                         $arrayToHistories = [];
                         foreach ($histories as $history)
                         {
@@ -81,7 +167,7 @@ class PartnersController extends Controller
                                 'cancelacion_id' => $history->cancelacion_id,
                                 'diferenciaMedida' => $history->diferenciaMedida,
                                 'precioUnidad' => $history->precioUnidad,
-                                'subTotal' => $history->subTotal,
+                                'subTotal' => ($history->subTotal < 10) ? 10 : $history->subTotal,
                                 'montoCancelado' => $history->montoCancelado,
                                 'fechaHoraHCancelacion' => $history->fechaHoraHCancelacion,
                                 'estadoMedicion' => $history->estadoMedicion,

@@ -25,7 +25,7 @@ class ConfigurationController extends Controller
     public function setConfiguration(Request $request)
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id == 1)
+        if ($user->tipoUsuario_id === 1)
         {
             $validator = Validator::make(
                 [
