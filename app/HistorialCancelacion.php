@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * App\HistorialCancelacion
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|HistorialCancelacion wherePrecioUnidad($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HistorialCancelacion whereSubTotal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HistorialCancelacion whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|HistorialCancelacion reading($reading)
  * @mixin \Eloquent
  */
 class HistorialCancelacion extends Model
@@ -43,6 +45,11 @@ class HistorialCancelacion extends Model
     public function cancellation(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne('App\Cancelacion', 'idCancelacion', 'cancelacion_id');
+    }
+
+    public function scopeReading($query, $reading)
+    {
+        return $query->where('lectura_id', $reading);
     }
 
     public function prepareSaving($lectura_id, $cancelacion_id, $diferenciaMedida, $precioUnidad, $subTotal, $montoCancelado, $estadoMedicion): void
@@ -62,8 +69,7 @@ class HistorialCancelacion extends Model
     {
         return self::where('lectura_id', '=', $key)
             ->where('estadoMedicion',  '!=', 'CANCELLED')
-            ->where('historial_cancelacions.diferenciaMedida',   '!=', 0)
-            ->where('historial_cancelacions.precioUnidad',   '!=', 0)
+            ->where('historial_cancelacions.precioUnidad',   '!=', 0.0)
             ->orderBy('created_at', 'desc')
             ->first();
     }
@@ -100,6 +106,24 @@ class HistorialCancelacion extends Model
             $mount,
             $state
         );
+    }
+
+    public static function verifyPaymentPending($gauge): int
+    {
+        $monthsOfOutstandingDebt = 0;
+        $months = DB::select("call verify_payment(?)", array($gauge));
+        foreach ($months as $month)
+        {
+                $state_measurement = DB::select("call ultimate_state(?)", array($month->idLectura));
+                foreach ($state_measurement as $state)
+                {
+                    if ($state->estadoMedicion === 'PENDING')
+                    {
+                        ++$monthsOfOutstandingDebt;
+                    }
+                }
+        }
+        return $monthsOfOutstandingDebt;
     }
 
 }

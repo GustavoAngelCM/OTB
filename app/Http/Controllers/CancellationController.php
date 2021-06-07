@@ -14,10 +14,10 @@ use Webpatser\Uuid\Uuid;
 
 class CancellationController extends Controller
 {
-    public function setCancellations(Request $request)
+    public function setCancellations(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
-        if ($user->tipoUsuario_id === 1)
+        if ($user && $user->tipoUsuario_id === 1)
         {
             try
             {
@@ -172,7 +172,7 @@ class CancellationController extends Controller
         }
     }
 
-    public function printCancellation(Request $request)
+    public function printCancellation(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make(
             Cancelacion::inputRulesPrint($request->input('codigo')),
@@ -200,7 +200,7 @@ class CancellationController extends Controller
         ], 200);
     }
 
-    public function exchangeRate()
+    public function exchangeRate(): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         if ($user->tipoUsuario_id === 1)
@@ -242,7 +242,7 @@ class CancellationController extends Controller
         ], 401);
     }
 
-    public function cancelTransaction($key)
+    public function cancelTransaction($key): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         if ($user->tipoUsuario_id === 1)

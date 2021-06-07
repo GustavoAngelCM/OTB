@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\ConfiguracionCancelacion;
+use App\HistorialCancelacion;
 use App\Medidor;
 use App\Persona;
 use App\Telefono;
@@ -131,22 +133,18 @@ class UserController extends Controller
 
             $user_auth = Auth::user();
 
-            $lecturaRequest = new Lecturas();
-            $lecturaRequest->preparingSaving($medidorGET->idMedidor, $user_auth->idUsuario, $valor['lectura'], ($valor['fechaNivelacion'] ?? null));
+            $configCancellations = ConfiguracionCancelacion::activeConfiguration();
+
+            Lecturas::_instanceAndSaving($medidorGET->idMedidor, $user_auth->idUsuario, $valor['lectura'], ($valor['fechaNivelacion'] ?? null), 'INITIAL');
 
             $ultimateRegisterReading = Lecturas::select("fechaMedicion")->groupBy('fechaMedicion')->orderBy('fechaMedicion', 'desc')->first();
             $dateLimit = Carbon::parse($ultimateRegisterReading->fechaMedicion);
             $dateLimit->setDay(1);
             $dateFlag = Carbon::parse($valor['fechaNivelacion']);
             $dateFlag->setDay(1);
-            $gaugeReading = $valor['lectura'];
-            while ($dateLimit > $dateFlag)
-            {
-                $gaugeReading += 10;
-                $dateFlag->setMonth($dateFlag->month + 1);
-                $lecturaRequest = new Lecturas();
-                $lecturaRequest->preparingSaving($medidorGET->idMedidor, $user_auth->idUsuario, $gaugeReading, $dateFlag);
-            }
+            $gaugeReading = (int)$valor['lectura'];
+
+            Lecturas::readingsToLevel($dateLimit, $dateFlag, $gaugeReading, $configCancellations, $medidorGET, $user_auth);
 
             $cancelacionRequest = new Cancelacion();
             $cancelacionRequest->prepareSaving($valor['compra']['precio'], $transaction_keys[$c_key], $valor['compra']['moneda'], $valor['compra']['tipo']);
@@ -179,14 +177,13 @@ class UserController extends Controller
         return $managers;
     }
 
-    public function updatePass($uid)
+    public function updatePass($uid): \Illuminate\Http\JsonResponse
     {
-        $user = Auth::user();
-        if ($user->tipoUsuario_id === 1)
+        $faker = Factory::create();
+        $secret = $faker->password;
+        $userSelected = User::uid($uid)->first();
+        if ($userSelected)
         {
-            $faker = Factory::create();
-            $secret =$faker->password;
-            $userSelected = User::uid($uid)->first();
             $userSelected->password = Hash::make($secret);
             $userSelected->save();
             return response()->json([
@@ -196,8 +193,42 @@ class UserController extends Controller
         }
         return response()->json([
             'success' => false,
-            'message' => 'Credenciales insuficientes.',
-        ], 401);
+            'message' => 'Error al cotejar al usuario.',
+        ], 400);
     }
 
+    public function editUser(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        $validator = Validator::make(
+            User::inputRulesUserEdit($request->input('name'), $request->input('email'), $request->input('password'), $id),
+            User::rulesUserEdit($id)
+        );
+        if ($validator->fails())
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Formato incorrecto.',
+                'errors' => $validator->errors()->messages()
+            ], 400);
+        }
+        $user = User::id($id)->first();
+        if ($user)
+        {
+            $user->name = $request->input('name') ?? $user->name;
+            $user->email = $request->input('email') ?? $user->email;
+            if ($request->input('password') !== null)
+            {
+                $user->password = Hash::make($request->input('password'));
+            }
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'Edición realizada exitosamente.'
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al cotejar el usuario.'
+        ], 400);
+    }
 }

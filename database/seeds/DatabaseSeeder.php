@@ -24,5 +24,8 @@ class DatabaseSeeder extends Seeder
             EventosTableSeeder::class,
             AsistenciasTableSeeder::class
         ));
+        $this->call(LecturasTableSeeder::class);
+        $this->call(CancelacionsTableSeeder::class);
+        $this->call(HistorialCancelacionsTableSeeder::class);
     }
 }

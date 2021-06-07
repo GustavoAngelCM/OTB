@@ -40,6 +40,8 @@ use Illuminate\Support\Facades\Http;
  * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereTipoCancelacion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion cancelTransaction($key)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion cancellationKey($key)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cancelacion id($id)
  * @mixin \Eloquent
  */
 class Cancelacion extends Model
@@ -66,32 +68,50 @@ class Cancelacion extends Model
         return $this->hasMany('App\HistorialTransferencia', 'cancelacion_id', 'idCancelacion');
     }
 
-    public function changeCoin($coin, $amount)
+    public function changeCoin($coin, $amount): float
     {
         $changeCoinRequest = Http::get('https://api.cambio.today/v1/full/BOB/json?key=4234|S^9b_2vNDkPjc~eR1Dr^4q3Y2fZfJxAA');
-        $changeCoin = $changeCoinRequest->json()['result']['conversion'];
-        if ($coin !== 'BOLIVIANOS')
+        if (!$changeCoinRequest->json())
         {
-            $objToChangeCoin = null;
-            foreach ($changeCoin as $valor)
+            if ($coin === 'BOLIVIANOS')
             {
-                if ($coin === 'DOLARES' && $valor['to'] == 'USD')
-                {
-                    $objToChangeCoin = $valor;
-                    break;
-                }
-                if ($coin === 'EUROS' && $valor['to'] == 'EUR')
-                {
-                    $objToChangeCoin = $valor;
-                    break;
-                }
+                return $amount;
             }
-            if ($objToChangeCoin !== null)
+            if ($coin === 'DOLARES')
             {
-                $amount /= $objToChangeCoin['rate'];
+                return $amount * 0.15;
+            }
+            if ($coin === 'EUROS')
+            {
+                return $amount * 0.12;
             }
         }
-        return $amount;
+        else
+        {
+            $changeCoin = $changeCoinRequest->json()['result']['conversion'];
+            if ($coin !== 'BOLIVIANOS')
+            {
+                $objToChangeCoin = null;
+                foreach ($changeCoin as $valor)
+                {
+                    if ($coin === 'DOLARES' && $valor['to'] === 'USD')
+                    {
+                        $objToChangeCoin = $valor;
+                        break;
+                    }
+                    if ($coin === 'EUROS' && $valor['to'] === 'EUR')
+                    {
+                        $objToChangeCoin = $valor;
+                        break;
+                    }
+                }
+                if ($objToChangeCoin !== null)
+                {
+                    $amount /= $objToChangeCoin['rate'];
+                }
+            }
+            return $amount;
+        }
     }
 
     public function getDataPartnerReadingToCancellation()
@@ -126,10 +146,8 @@ class Cancelacion extends Model
     public static function getIDCancellation($key)
     {
         return self::where('keyCancelacion', '=', $key)
-            ->select(
-                'idCancelacion'
-            )
-            ->get()->first();
+            ->select('idCancelacion')
+            ->first();
     }
 
     public static function rulesPrint(): array
@@ -166,6 +184,12 @@ class Cancelacion extends Model
         $this->tipoCancelacion = strtoupper($type);
         $this->fechaCancelacion = now();
         $this->save();
+    }
+
+    public static function _instanceAndSaving($total, $key, $coin, $type) : void
+    {
+        $cancellation = new self();
+        $cancellation->prepareSaving($total, $key, $coin, $type);
     }
 
     public static function inputRulesPrint($key): array
@@ -253,7 +277,7 @@ class Cancelacion extends Model
         return $dataHistoriesFines;
     }
 
-    public static function calculatedTotalCancelled($key)
+    public static function calculatedTotalCancelled($key): int
     {
         $mountsInProcess = HistorialCancelacion::inProcessTransaction($key);
         $total = 0;
@@ -311,10 +335,10 @@ class Cancelacion extends Model
     public static function inputRulesGaugeTransaction($cancellation, $key): array
     {
         return [
-            'montoCancelacion' => $cancellation['precio'],
-            'moneda' => $cancellation['moneda'],
-            'tipoCancelacion' => $cancellation['tipo'],
-            'keyCancelacion' => $key,
+            'montoCancelacion' => (float) $cancellation['precio'],
+            'moneda' => strtoupper($cancellation['moneda']),
+            'tipoCancelacion' => strtoupper($cancellation['tipo']),
+            'keyCancelacion' => $key
         ];
     }
 
@@ -322,8 +346,8 @@ class Cancelacion extends Model
     {
         return [
             'montoCancelacion' => 'bail|required|numeric',
-            'moneda' => 'bail|required',
-            'tipoCancelacion' => 'bail|required',
+            'moneda' => 'bail|required|in:BOLIVIANOS,DOLARES,EUROS,OTRO',
+            'tipoCancelacion' => 'bail|required|in:EFECTIVO,CHEQUE,DEPOSITO,WEB,OTRO',
             'keyCancelacion' => 'bail|required|unique:cancelacions'
         ];
     }
@@ -344,4 +368,13 @@ class Cancelacion extends Model
         return $query->where('keyCancelacion',  $key)->update(['descartado' => 1]);
     }
 
+    public function scopeCancellationKey($query, $key)
+    {
+        return $query->where('keyCancelacion',  $key);
+    }
+
+    public function scopeId($query, $id)
+    {
+        return $query->where('idCancelacion', $id);
+    }
 }

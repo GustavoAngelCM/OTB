@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
@@ -47,6 +48,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|User uid($uid)
  * @method static \Illuminate\Database\Eloquent\Builder|User innerJoinsToPerson()
+ * @method static \Illuminate\Database\Eloquent\Builder|User uidExcept($uid)
+ * @method static \Illuminate\Database\Eloquent\Builder|User notAdmin()
+ * @method static \Illuminate\Database\Eloquent\Builder|User id($id)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -122,9 +126,24 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Medidor', 'usuario_id', 'idUsuario')->orderByRaw('CAST(medidors.ordenMedidor AS INT) ASC');
     }
 
+    public function scopeId($query, $id)
+    {
+        return $query->where('idUsuario', (int) $id);
+    }
+
     public function scopeUid($query, $uid)
     {
         return $query->where('name', urldecode($uid));
+    }
+
+    public function scopeUidExcept($query, $uid)
+    {
+        return $query->where('name', '!=', urldecode($uid));
+    }
+
+    public function scopeNotAdmin($query)
+    {
+        return $query->where('tipoUsuario_id', '!=', 1);
     }
 
     public function scopeInnerJoinsToPerson($query)
@@ -134,7 +153,7 @@ class User extends Authenticatable implements JWTSubject
 
     public static function userGetForName($name)
     {
-        return self::where('name', urldecode($name))->get()->first();
+        return self::where('name', urldecode($name))->first();
     }
 
     public static function personGetForName($name)
@@ -150,6 +169,37 @@ class User extends Authenticatable implements JWTSubject
     public static function gaugesGet_userGetForName($gauges_userGet)
     {
         return $gauges_userGet->gauges()->get();
+    }
+
+    public static function inputRulesUserEdit($name, $email, $password, $id): array
+    {
+        return [
+            'key' => (int) $id,
+            'name' => $name,
+            'email' => $email,
+            'password' => $password
+        ];
+    }
+
+    public static function rulesUserEdit($id): array
+    {
+        return [
+            'key' => 'bail|required|numeric|exists:users,idUsuario',
+            'name' => [
+                'bail',
+                'nullable',
+                'max:20',
+                Rule::unique('users', 'name')->ignore($id, 'idUsuario')
+            ],
+            'email' => [
+                'bail',
+                'nullable',
+                'email',
+                'max:50',
+                Rule::unique('users', 'email')->ignore($id, 'idUsuario')
+            ],
+            'password' => 'bail|nullable|min:6|max:15|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/'
+        ];
     }
 
     public static function inputRulesUser($type, $names, $lastNames, $ci, $dateOfBirth, $sex, $email, $ico, $gauges, $phones): array
@@ -178,9 +228,27 @@ class User extends Authenticatable implements JWTSubject
             'fechaNacimiento' => 'bail|required|date',
             'sexo' => 'bail|required|max:1',
             'email' => 'bail|required|email|max:50|unique:users',
-            'ico' => 'required',
+            'ico' => 'required|in:Varon_1,Varon_2,Mujer_1,Mujer_2',
             'medidores' => 'required',
             'telefonos' => 'required'
+        ];
+    }
+
+    public static function inputRulesMeterTransfer($new, $gauge, $data): array
+    {
+        return [
+            'newPartner' => $new,
+            'gauge' => $gauge,
+            'data' => $data
+        ];
+    }
+
+    public static function rulesMeterTransfer(): array
+    {
+        return [
+            'newPartner' => 'bail|required|boolean',
+            'gauge' => 'bail|required|exists:medidors,numeroMedidor',
+            'data' => 'required'
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 /**
  * App\Persona
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Persona whereUpdatedAt($value)
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|Persona cancelled()
- * @method static \Illuminate\Database\Eloquent\Builder|Persona dateSelect($month)
+ * @method static \Illuminate\Database\Eloquent\Builder|Persona dateSelect($month, $isChargePerMonth = false)
  * @method static \Illuminate\Database\Eloquent\Builder|Persona innerJoinsToCancellation()
  * @method static \Illuminate\Database\Eloquent\Builder|Persona innerJoinsToHistory()
  * @method static \Illuminate\Database\Eloquent\Builder|Persona innerJoinsToGauge()
@@ -207,9 +208,10 @@ class Persona extends Model
         return "{$this->ci} {$exp}";
     }
 
-    public static function inputRulesUpdate($tipo, $nombres, $apellidos, $ci, $fechaNacimiento, $sexo, $email, $ico, $telefonos): array
+    public static function inputRulesUpdate($uid, $tipo, $nombres, $apellidos, $ci, $fechaNacimiento, $sexo, $email, $ico, $telefonos): array
     {
         return [
+            "uid" => $uid,
             "tipo" => $tipo,
             "nombres" => $nombres,
             "apellidos" => $apellidos,
@@ -222,18 +224,52 @@ class Persona extends Model
         ];
     }
 
-    public static function rulesUpdate(): array
+    public static function rulesUpdate($id): array
+    {
+        return [
+            "uid" => "bail|required|exists:users,name",
+            "tipo" => "bail|required|numeric",
+            "nombres" => "required",
+            "apellidos" => "required",
+            "ci" => [
+                'bail',
+                'required',
+                Rule::unique('personas', 'ci')->ignore($id, 'idPersona')
+            ],
+            "fechaNacimiento" => "bail|required|date",
+            "sexo" => "bail|required|in:F,M",
+            "email" => "bail|required|email",
+            "ico" => "bail|required|in:Varon_1,Varon_2,Mujer_1,Mujer_2",
+            "telefonos" => "bail|nullable|numeric"
+        ];
+    }
+
+    public static function rulesUpdateTransfer(): array
     {
         return [
             "tipo" => "bail|required|numeric",
             "nombres" => "required",
             "apellidos" => "required",
-            "ci" => "bail|required|exists:personas",
+            "ci" => "bail|required|unique:personas",
             "fechaNacimiento" => "bail|required|date",
-            "sexo" => "required",
+            "sexo" => "bail|required|in:F,M",
             "email" => "bail|required|email",
-            "ico" => "required",
+            "ico" => "bail|required|in:Varon_1,Varon_2,Mujer_1,Mujer_2",
             "telefonos" => "bail|nullable|numeric"
+        ];
+    }
+
+    public static function inputRulesOtherPartner($uid): array
+    {
+        return [
+            "uid" => $uid
+        ];
+    }
+
+    public static function rulesOtherPartner(): array
+    {
+        return [
+            "uid" => "bail|required|exists:users,name"
         ];
     }
 
@@ -247,13 +283,36 @@ class Persona extends Model
         ];
     }
 
-    public static function rulesReport(): array
+    public static function rulesReport($isAmountPerMonth): array
     {
+        if (is_string($isAmountPerMonth))
+        {
+            return [
+                "month" => "string",
+                "payment" => "in:AMOUNT_PER_MONTH",
+                "fine" => "in:AMOUNT_PER_MONTH",
+                "assistance" => "in:AMOUNT_PER_MONTH"
+            ];
+        }
         return [
-            "month" => "bail|date|nullable",
+            "month" => "nullable",
             "payment" => "bail|boolean|nullable",
             "fine" => "bail|boolean|nullable",
             "assistance" => "bail|boolean|nullable"
+        ];
+    }
+
+    public static function inputRulesPartnerExcept($uid) : array
+    {
+        return [
+            "name" => $uid
+        ];
+    }
+
+    public static function rulesPartnerExcept() : array
+    {
+        return [
+            "name" => "bail|required|exists:users"
         ];
     }
 
@@ -304,8 +363,18 @@ class Persona extends Model
         return ($cancelled) ? $query->whereNotNull('asistencias.cancelacion_id') : $query->whereNull('asistencias.cancelacion_id');
     }
 
-    public function scopeDateSelect($query, $month)
+    public function scopeDateSelect($query, $month, $isChargePerMonth = false)
     {
+        if (strpos($month, ' - '))
+        {
+            [$init, $end] = explode(' - ', $month);
+            return $query->whereBetween('cancelacions.fechaCancelacion', [Carbon::parse($init), Carbon::parse($end)->endOfDay()]);
+        }
+        if ($isChargePerMonth)
+        {
+            return $query->whereYear('cancelacions.fechaCancelacion', $month->year)
+                ->whereMonth('cancelacions.fechaCancelacion', $month->month);
+        }
         return $query->whereYear('lecturas.fechaMedicion', $month->year)
             ->whereMonth('lecturas.fechaMedicion', $month->month);
     }
@@ -320,9 +389,17 @@ class Persona extends Model
         return $query->orderByRaw('CAST(medidors.ordenMedidor AS INT) ASC');
     }
 
-    public static function reportsManagement($month, $payment, $fine, $assistance)
+    public static function  reportsManagement($month, $payment, $fine, $assistance)
     {
-        $month = ($month === null) ? now() : Carbon::parse($month);
+        Carbon::setLocale('es');
+        if ($month === null)
+        {
+            $month = now();
+        }
+        else if (!strpos($month, ' - '))
+        {
+            $month = Carbon::parse($month);
+        }
         if ($payment === null && $fine === null && $assistance === null)
         {
             return self::innerJoinsToGauge()
@@ -334,22 +411,70 @@ class Persona extends Model
                 )
                 ->get();
         }
+        if ($payment === 'AMOUNT_PER_MONTH' && $fine === 'AMOUNT_PER_MONTH' && $assistance === 'AMOUNT_PER_MONTH')
+        {
+            return self::innerJoinsToCancellation()
+                ->dateSelect($month, true)
+                ->cancelled()
+                ->gaugeOrder()
+                ->selectRaw(
+                    'concat_ws(" ", personas.pNombre, personas.sNombre, personas.apellidoP, personas.apellidoM) as fullName, '.
+                    '(medidors.ordenMedidor) as order_gauge, '.
+                    '(medidors.numeroMedidor) as number_gauge, '.
+                    '(lecturas.fechaMedicion) as key_transaction, '.
+                    '(historial_cancelacions.montoCancelado) as mount'
+                )
+                ->get()
+                ->map(function ($item) {
+                    $month = Carbon::parse($item->key_transaction);
+                    $item->key_transaction = strtoupper("{$month->monthName} de {$month->year}");
+                    return $item;
+                });
+        }
         if ($payment !== null)
         {
             if ($payment)
             {
+                $parameter = strpos($month, ' - ') ? '(historial_cancelacions.montoCancelado) as mount' : '(cancelacions.montoCancelacion) as mount';
+                if ($fine)
+                {
+                    return self::innerJoinsToCancellation()
+                        ->dateSelect($month)
+                        ->fine()
+                        ->cancelled()
+                        ->gaugeOrder()
+                        ->selectRaw(
+                            'concat_ws(" ", personas.pNombre, personas.sNombre, personas.apellidoP, personas.apellidoM) as fullName, '.
+                            '(medidors.ordenMedidor) as order_gauge, '.
+                            '(medidors.numeroMedidor) as number_gauge, '.
+                            '(lecturas.fechaMedicion) as key_transaction, '.
+                            $parameter
+                        )
+                        ->get()
+                        ->map(function ($item) {
+                            $month = Carbon::parse($item->key_transaction);
+                            $item->key_transaction = strtoupper("{$month->monthName} de {$month->year}");
+                            return $item;
+                        });
+                }
                 return self::innerJoinsToCancellation()
                     ->dateSelect($month)
-                    ->fine()
                     ->cancelled()
                     ->gaugeOrder()
                     ->selectRaw(
                         'concat_ws(" ", personas.pNombre, personas.sNombre, personas.apellidoP, personas.apellidoM) as fullName, '.
                         '(medidors.ordenMedidor) as order_gauge, '.
                         '(medidors.numeroMedidor) as number_gauge, '.
-                        '(cancelacions.keyCancelacion) as key_transaction'
+                        '(lecturas.fechaMedicion) as key_transaction, '.
+                        $parameter
                     )
-                    ->get();
+                    ->get()
+                    ->map(function ($item) {
+                        $month = Carbon::parse($item->key_transaction);
+                        $item->key_transaction = strtoupper("{$month->monthName} de {$month->year}");
+                        return $item;
+                    });
+
             }
             return self::innerJoinsToHistory()
                 ->dateSelect($month)
@@ -379,9 +504,15 @@ class Persona extends Model
                         'concat_ws(" ", personas.pNombre, personas.sNombre, personas.apellidoP, personas.apellidoM) as fullName, '.
                         '(medidors.ordenMedidor) as order_gauge, '.
                         '(medidors.numeroMedidor) as number_gauge, '.
-                        '(cancelacions.keyCancelacion) as key_transaction'
+                        '(lecturas.fechaMedicion) as key_transaction, '.
+                        '(cancelacions.montoCancelacion) as mount'
                     )
-                    ->get();
+                    ->get()
+                    ->map(function ($item) {
+                        $month = Carbon::parse($item->key_transaction);
+                        $item->key_transaction = strtoupper("{$month->monthName} de {$month->year}");
+                        return $item;
+                    });
             }
             return self::innerJoinsToHistory()
                 ->dateSelect($month)

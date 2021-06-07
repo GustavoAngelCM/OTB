@@ -47,4 +47,10 @@ class Telefono extends Model
         $this->save();
     }
 
+    public static function _instanceAndSaving($person, $numberPhone): void
+    {
+        $cancellationNew = new self();
+        $cancellationNew->preparingSaving($person, $numberPhone);
+    }
+
 }

@@ -5,9 +5,12 @@
 /vendor
 /.idea
 .env
+.env.example
 .env.backup
+Procfile
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+.gitignore

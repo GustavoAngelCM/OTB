@@ -54,9 +54,8 @@ class ConfiguracionCancelacion extends Model
                     'fechaActualizacion'
                 ])
                 ->orderBy('created_at', 'desc')
-                ->get()
                 ->first()
             :
-            self::where('activo', '=', 1)->orderBy('created_at', 'desc')->get()->first();
+            self::where('activo', '=', 1)->orderBy('created_at', 'desc')->first();
     }
 }
